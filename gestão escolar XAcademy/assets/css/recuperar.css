@@ -1,0 +1,512 @@
+/* Global color variables for consistent theming */
+:root {
+    --primary: #3a0ca3;      /* Dark purple - main brand color */
+    --secondary: #4cc9f0;    /* Light blue - secondary brand color */
+    --accent: #f72585;       /* Pink - accent for buttons and important elements */
+    --light: #f8f9fa;        /* Light gray - backgrounds */
+    --dark: #212529;         /* Dark gray - text */
+}
+
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Full-page layout with gradient background */
+body {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    position: relative;
+    overflow: hidden;
+}
+
+/* Wave animations at the bottom of the page */
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.15" d="M0,64L48,80C96,96,192,128,288,133.3C384,139,480,117,576,128C672,139,768,181,864,186.7C960,192,1056,160,1152,138.7C1248,117,1344,107,1392,101.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+    background-size: 1440px 100px;
+    animation: wave 20s linear infinite;
+}
+
+/* Multiple wave layers with different speeds and opacities */
+.wave:nth-child(2) {
+    bottom: 10px;
+    opacity: 0.5;
+    animation: wave 15s linear reverse infinite;
+}
+
+.wave:nth-child(3) {
+    bottom: 20px;
+    opacity: 0.2;
+    animation: wave 30s linear infinite;
+}
+
+/* Wave animation keyframes */
+@keyframes wave {
+    0% { background-position-x: 0; }
+    100% { background-position-x: 1440px; }
+}
+
+/* Particle animation container */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Individual floating particles */
+.particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    animation: float 10s linear infinite;
+}
+
+/* Particle floating animation */
+@keyframes float {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    50% { opacity: 0.7; }
+    100% { transform: translateY(-30vh) translateX(20vw); opacity: 0; }
+}
+
+/* Main container for the recovery form */
+.recovery-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    width: 800px; /* Increased width for horizontal layout */
+    max-width: 90%;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+    animation: cardAppear 0.8s ease-out;
+}
+
+/* Horizontal layout structure */
+.recovery-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+/* Left column - Logo section */
+.recovery-left {
+    flex: 1;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding-right: 40px;
+}
+
+/* Right column - Form section */
+.recovery-right {
+    flex: 1.5;
+}
+
+/* Card appearance animation */
+@keyframes cardAppear {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Logo section styling */
+.logo-section {
+    text-align: center;
+}
+
+/* Circular container for X logo */
+.logo-circle {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    box-shadow: 0 5px 15px rgba(58, 12, 163, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shining effect on logo */
+.logo-circle::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg);
+    top: -20px;
+    left: -50px;
+    animation: shine 3s infinite;
+}
+
+/* Shine animation keyframes */
+@keyframes shine {
+    0% { left: -150px; }
+    20% { left: 120%; }
+    100% { left: 120%; }
+}
+
+/* Logo text styling */
+.logo-circle span {
+    color: white;
+    font-weight: bold;
+    font-size: 50px; /* Increased size for horizontal layout */
+}
+
+/* Logo heading styling */
+.logo-text h1 {
+    font-size: 28px;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+/* Color accent for "Academy" text */
+.logo-text h1 span {
+    color: var(--secondary);
+}
+
+/* Subtitle under logo */
+.logo-text p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Form title section */
+.form-title {
+    margin-bottom: 20px;
+    text-align: left; /* Changed to left for horizontal layout */
+}
+
+/* Main heading in form */
+.form-title h2 {
+    color: var(--primary);
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Instructions paragraph */
+.form-title p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Method selector toggle buttons */
+.method-selector {
+    display: flex;
+    margin-bottom: 25px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Individual toggle option */
+.method-option {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    color: #666;
+}
+
+/* Active toggle state */
+.method-option.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Icons in toggle buttons */
+.method-option i {
+    margin-right: 8px;
+}
+
+/* Form group for input fields */
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+/* Input field labels */
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--dark);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* Input group with icon */
+.input-group {
+    position: relative;
+}
+
+/* Input field styling */
+.input-group input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s;
+    color: var(--dark);
+}
+
+/* Focus state for input fields */
+.input-group input:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+    outline: none;
+}
+
+/* Icon inside input field */
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+/* Icon color change on input focus */
+.input-group input:focus + .input-icon {
+    color: var(--secondary);
+}
+
+/* Submit button styling */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Button shine effect */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s;
+}
+
+/* Button hover effects */
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(247, 37, 133, 0.4);
+}
+
+/* Button shine animation on hover */
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Button active (click) state */
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(247, 37, 133, 0.4);
+}
+
+/* Back to login link */
+.back-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Changed to left for horizontal layout */
+    margin-top: 20px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+/* Icon in back link */
+.back-link i {
+    margin-right: 5px;
+}
+
+/* Back link hover effect */
+.back-link:hover {
+    color: var(--accent);
+    transform: translateX(-3px);
+}
+
+/* Countdown timer section (hidden by default) */
+.countdown {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Countdown instruction text */
+.countdown p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Timer display */
+.timer {
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 20px;
+}
+
+/* Success message container (hidden by default) */
+.success-message {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(76, 201, 240, 0.1);
+    border-radius: 10px;
+    border-left: 4px solid var(--secondary);
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Fade in animation for success message */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Success message icon */
+.success-message i {
+    font-size: 40px;
+    color: var(--secondary);
+    margin-bottom: 10px;
+}
+
+/* Success message heading */
+.success-message h3 {
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+/* Success message text */
+.success-message p {
+    color: #666;
+}
+
+/* Loading animation */
+.loader {
+    display: none;
+    margin: 0 auto;
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+/* Spinner animation keyframes */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive design for tablets */
+@media screen and (max-width: 768px) {
+    .recovery-container {
+        width: 90%;
+        padding: 30px;
+    }
+    
+    /* Switch to vertical layout on smaller screens */
+    .recovery-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .recovery-left {
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        padding-right: 0;
+        padding-bottom: 20px;
+        margin-bottom: 0;
+    }
+    
+    /* Center titles on mobile */
+    .form-title {
+        text-align: center;
+    }
+    
+    /* Adjust logo size for smaller screens */
+    .logo-circle {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .logo-circle span {
+        font-size: 40px;
+    }
+}
+
+/* Responsive design for mobile phones */
+@media screen and (max-width: 480px) {
+    .recovery-container {
+        padding: 30px 20px;
+    }
+    
+    /* Smaller logo for mobile */
+    .logo-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .logo-circle span {
+        font-size: 30px;
+    }
+    
+    .logo-text h1 {
+        font-size: 24px;
+    }
+    
+    .form-title h2 {
+        font-size: 20px;
+    }
+    
+    /* Smaller toggle buttons for mobile */
+    .method-option {
+        padding: 10px 5px;
+        font-size: 14px;
+    }
+    
+    .method-option i {
+        margin-right: 4px;
+    }
+}

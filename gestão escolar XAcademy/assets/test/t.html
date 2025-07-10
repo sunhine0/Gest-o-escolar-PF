@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Boletim Escolar</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <div class="logo-circle"><span>X</span></div>
+            <span>Academy</span>
+        </a>
+        <div class="nav-links">
+            <a href="#" class="active">Início</a>
+            <a href="#">Boletins</a>
+            <a href="#">Alunos</a>
+            <a href="#">Turmas</a>
+        </div>
+    </nav>
+    
+    <header>
+        <h1>Sistema de Boletim Escolar</h1>
+    </header>
+
+    <nav class="curso-nav no-print">
+        <ul>
+            <li><a href="#" class="curso-link active" data-curso="informatica">Informática de Gestão</a></li>
+            <li><a href="#" class="curso-link" data-curso="gestao">Gestão Empresarial</a></li>
+            <li><a href="#" class="curso-link" data-curso="rh">Gestão de Recursos Humanos</a></li>
+            <li><a href="#" class="curso-link" data-curso="contabilidade">Contabilidade</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="form-container no-print">
+            <h2>Dados do Aluno</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nomeEscola">Nome da Escola:</label>
+                    <input type="text" id="nomeEscola" placeholder="Nome da Escola">
+                </div>
+                <div class="form-group">
+                    <label for="anoLetivo">Ano Letivo:</label>
+                    <input type="text" id="anoLetivo" placeholder="Ano Letivo">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nomeAluno">Nome do Aluno:</label>
+                    <input type="text" id="nomeAluno" placeholder="Nome do Aluno">
+                </div>
+                <div class="form-group">
+                    <label for="turma">Turma:</label>
+                    <input type="text" id="turma" placeholder="Turma">
+                </div>
+                <div class="form-group">
+                    <label for="classeAluno">Classe:</label>
+                    <select id="classeAluno">
+                        <option value="10">Classe 10</option>
+                        <option value="11">Classe 11</option>
+                        <option value="12">Classe 12</option>
+                        <option value="13">Classe 13</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="periodo">Período:</label>
+                    <select id="periodo">
+                        <option value="Manhã">Manhã</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noite">Noite</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="curso">Curso:</label>
+                    <select id="curso">
+                        <option value="Informática de Gestão">Informática de Gestão</option>
+                        <option value="Gestão Empresarial">Gestão Empresarial</option>
+                        <option value="Gestão de Recursos Humanos">Gestão de Recursos Humanos</option>
+                        <option value="Contabilidade">Contabilidade</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="trimestre">Trimestre:</label>
+                    <select id="trimestre">
+                        <option value="1">1º Trimestre</option>
+                        <option value="2">2º Trimestre</option>
+                        <option value="3">3º Trimestre</option>
+                    </select>
+                </div>
+            </div>
+            <button id="gerarBoletim">Gerar Boletim</button>
+        </div>
+
+        <div id="boletimNotas" class="no-print hidden">
+            <h2>Preencha as Notas</h2>
+            <div id="tabelaNotas">
+                <!-- O conteúdo da tabela será gerado pelo JavaScript -->
+            </div>
+            <button id="calcularNotas">Calcular</button>
+        </div>
+
+        <div id="boletimFinal" class="boletim-container">
+            <div id="boletimParaImprimir">
+                <div class="boletim-header">
+                    <h2>Boletim Escolar</h2>
+                </div>
+                
+                <div class="boletim-info">
+                    <div><strong>Instituição:</strong> <span id="boletimEscola"></span></div>
+                    <div><strong>Ano Letivo:</strong> <span id="boletimAno"></span></div>
+                    <div><strong>Nome do Aluno:</strong> <span id="boletimAluno"></span></div>
+                    <div><strong>Turma:</strong> <span id="boletimTurma"></span></div>
+                    <div><strong>Classe:</strong> <span id="boletimClasse"></span></div>
+                    <div><strong>Período:</strong> <span id="boletimPeriodo"></span></div>
+                    <div><strong>Curso:</strong> <span id="boletimCurso"></span></div>
+                    <div><strong>Trimestre:</strong> <span id="boletimTrimestre"></span></div>
+                </div>
+                
+                <div id="boletimTabelaResultados">
+                    <!-- O resultado das notas será inserido aqui -->
+                </div>
+                
+                <div class="boletim-results">
+                    <p><strong>Média Final:</strong> <span id="mediaFinal"></span></p>
+                    <p><strong>Aproveitamento:</strong> <span id="aproveitamento"></span>%</p>
+                    <p><strong>Situação:</strong> <span id="situacao"></span></p>
+                </div>
+                
+                <div class="assinatura-container">
+                    <div class="assinatura-area">
+                        <canvas id="assinaturaCanvas" width="300" height="100"></canvas>
+                        <div class="assinatura-label">Assinatura do Diretor</div>
+                    </div>
+                    <div class="data-area">
+                        <p>Data: <span id="dataBoletim"></span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons no-print">
+                <button id="limparAssinatura" class="secondary">Limpar Assinatura</button>
+                <button id="salvarPDF" class="secondary">Salvar em PDF</button>
+                <button id="imprimir" class="accent">Imprimir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

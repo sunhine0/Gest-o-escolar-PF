@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos - X Academy</title>
+    <link rel="stylesheet" href="assets/css/eventos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+</head>
+<body>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    
+    <div class="particles" id="particles"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="paginainicial.html" class="logo">
+            <div class="logo-circle"><span>X</span></div>
+            <span>Academy</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="paginainicial.html"><i class="fas fa-home"></i> Início</a></li>
+           
+            <li><a href="eventos.html"><i class="fas fa-calendar-alt"></i> Eventos</a></li>
+           
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Calendário -->
+        <div class="calendar-container">
+            <div class="month-display" id="monthDisplay">Março 2025</div>
+            <div class="calendar">
+                <button class="btn" id="prevBtn" onclick="prevWeek()">❮</button>
+                <div class="days-container" id="daysContainer">
+                    <!-- Os dias serão inseridos via JavaScript -->
+                </div>
+                <button class="btn" id="nextBtn" onclick="nextWeek()">❯</button>
+            </div>
+        </div>
+
+        <!-- Formulário de Criação de Evento -->
+        <section id="createEventSection">
+            <h2>Criar Novo Evento</h2>
+            <form id="eventForm">
+                <label for="title">Título do Evento</label>
+                <input type="text" id="title" placeholder="Digite o título do evento" required>
+                
+                <label for="description">Descrição</label>
+                <textarea id="description" rows="3" placeholder="Descreva os detalhes do evento" required></textarea>
+                
+                <label for="date">Data</label>
+                <input type="date" id="date" required>
+                
+                <label for="location">Local</label>
+                <input type="text" id="location" placeholder="Onde o evento será realizado?" required>
+                
+                <button type="submit">Criar Evento</button>
+            </form>
+        </section>
+
+        <!-- Lista de Eventos -->
+        <section id="eventsSection">
+            <h2>Eventos Disponíveis</h2>
+            <div id="eventContainer">
+                <!-- Os cards de eventos serão inseridos via JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/eventos.js"></script>
+</body>
+</html>

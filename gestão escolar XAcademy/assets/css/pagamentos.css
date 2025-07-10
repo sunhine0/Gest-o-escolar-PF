@@ -1,0 +1,540 @@
+
+      /* Adicionar ao estilo existente */
+
+      :root {
+        --primary: #3a0ca3;
+        --secondary: #4cc9f0;
+        --accent: #f72585;
+        --light: #f8f9fa;
+        --dark: #212529;
+    }
+    
+    body {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+    
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    .wave {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100px;
+                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.15" d="M0,64L48,80C96,96,192,128,288,133.3C384,139,480,117,576,128C672,139,768,181,864,186.7C960,192,1056,160,1152,138.7C1248,117,1344,107,1392,101.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+                background-size: 1440px 100px;
+                animation: wave 20s linear infinite;
+            }
+            
+            .wave:nth-child(2) {
+                bottom: 10px;
+                opacity: 0.5;
+                animation: wave 15s linear reverse infinite;
+            }
+            
+            .wave:nth-child(3) {
+                bottom: 20px;
+                opacity: 0.2;
+                animation: wave 30s linear infinite;
+            }
+            
+            @keyframes wave {
+                0% { background-position-x: 0; }
+                100% { background-position-x: 1440px; }
+            }
+            
+    
+    .container {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    }
+    
+    /* Preview do boletim */
+    .boletim-preview {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        position: relative;
+        max-height: 300px;
+        overflow: hidden;
+    }
+    
+    .boletim-preview::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        background: linear-gradient(transparent, #f8f9fa);
+        pointer-events: none;
+    }
+    
+    .preview-more {
+        text-align: center;
+        font-style: italic;
+        color: #6c757d;
+        margin-top: 20px;
+    }
+    
+    /* Recibo completo */
+    .receipt {
+        background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(238, 242, 255, 0.9) 100%);
+        border: 1px solid #e1e4f0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+    
+    .receipt::before {
+        content: '';
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 100px;
+        height: 100px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M17 2v2h3.007c.548 0 .993.445.993.993v16.014c0 .548-.445.993-.993.993H3.993C3.445 22 3 21.555 3 21.007V4.993C3 4.445 3.445 4 3.993 4H7V2h10zm-4 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-1 2H8v6h10v-6h-4v-2h-2v2z' fill='rgba(58,12,163,0.1)'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        opacity: 0.2;
+    }
+    
+    .receipt-header {
+        border-bottom: 2px solid #eaecf4;
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .receipt-row {
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed #eaecf4;
+    }
+    
+    .receipt-label {
+        font-weight: 600;
+        color: var(--primary);
+    }
+    
+    .receipt-footer {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 2px solid #eaecf4;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    /* Botões */
+    .btn {
+        transition: all 0.3s;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        font-weight: 500;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(45deg, var(--primary), #4a00e0);
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(45deg, #2a0876, #3700b3);
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .btn-secondary {
+        background-color: #e9ecef;
+        color: #495057;
+        border: none;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #dee2e6;
+        color: #343a40;
+        transform: translateY(-1px);
+    }
+    
+    .btn-ver-boletim {
+        background: linear-gradient(45deg, #20bf55, #01baef);
+        color: white;
+        border: none;
+    }
+    
+    .btn-ver-boletim:hover {
+        background: linear-gradient(45deg, #1da94d, #019dcf);
+        transform: translateY(-1px);
+    }
+    
+    /* Campos de formulário */
+    input:focus, select:focus, textarea:focus {
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.25);
+        transition: all 0.3s;
+    }
+    
+    input.error, select.error {
+        border-color: #ff4d6d;
+        box-shadow: 0 0 0 2px rgba(255, 77, 109, 0.2);
+    }
+    
+    /* Responsividade */
+    @media print {
+        body {
+            background: none;
+        }
+        
+        .receipt {
+            box-shadow: none;
+            border: 1px solid #ddd;
+        }
+        
+        .container {
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+        }
+    }
+    
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+    
+            body {
+                background-color: #f0f2f5;
+                color: var(--dark);
+            }
+    
+            .navbar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.8rem 2rem;
+                background-color: var(--light);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+    
+            .logo {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                color: var(--primary);
+                font-weight: bold;
+                font-size: 1.5rem;
+            }
+    
+            .logo-circle {
+                width: 35px;
+                height: 35px;
+                background-color: var(--primary);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 10px;
+            }
+    
+            .logo-circle span {
+                color: var(--light);
+                font-weight: bold;
+            }
+    
+            .nav-links {
+                display: flex;
+                list-style: none;
+            }
+    
+            .nav-links li {
+                margin-left: 1.5rem;
+            }
+    
+            .nav-links a {
+                text-decoration: none;
+                color: var(--dark);
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+    
+            .nav-links a:hover {
+                color: var(--accent);
+            }
+    
+            .container {
+                max-width: 1000px;
+                margin: 2rem auto;
+                padding: 2rem;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            }
+    
+            h1 {
+                color: var(--primary);
+                text-align: center;
+                margin-bottom: 2rem;
+                position: relative;
+            }
+    
+            h1::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 3px;
+                background: linear-gradient(to right, var(--primary), var(--accent));
+                border-radius: 3px;
+            }
+    
+            .step-indicator {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 2rem;
+            }
+    
+            .step {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 16%;
+            }
+    
+            .step-number {
+                width: 35px;
+                height: 35px;
+                background-color: var(--light);
+                border: 2px solid var(--primary);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--primary);
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+    
+            .step.active .step-number {
+                background-color: var(--primary);
+                color: white;
+            }
+    
+            .step-title {
+                font-size: 0.8rem;
+                text-align: center;
+                color: var(--dark);
+            }
+    
+            .step.active .step-title {
+                color: var(--primary);
+                font-weight: bold;
+            }
+    
+            .steps-container {
+                position: relative;
+            }
+    
+            .step-content {
+                display: none;
+            }
+    
+            .step-content.active {
+                display: block;
+                animation: fadeIn 0.5s;
+            }
+    
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+    
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+    
+            label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+                color: var(--dark);
+            }
+    
+            input, select, textarea {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 1rem;
+                transition: border 0.3s;
+            }
+    
+            input:focus, select:focus, textarea:focus {
+                border-color: var(--secondary);
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+            }
+    
+            .form-row {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+    
+            .form-col {
+                flex: 1;
+            }
+    
+            .btn {
+                padding: 0.75rem 1.5rem;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: 500;
+                transition: all 0.3s;
+            }
+    
+            .btn-primary {
+                background-color: var(--primary);
+                color: white;
+            }
+    
+            .btn-primary:hover {
+                background-color: #2a0876;
+            }
+    
+            .btn-secondary {
+                background-color: #e9ecef;
+                color: var(--dark);
+            }
+    
+            .btn-secondary:hover {
+                background-color: #dfe2e5;
+            }
+    
+            .navigation-buttons {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 2rem;
+            }
+    
+            .payment-info {
+                background-color: #f0f8ff;
+                padding: 1rem;
+                border-radius: 5px;
+                border-left: 4px solid var(--secondary);
+                margin-bottom: 1.5rem;
+            }
+    
+            .checkbox-container {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 1.5rem;
+            }
+    
+            .checkbox-container input {
+                width: auto;
+                margin-right: 10px;
+                margin-top: 5px;
+            }
+    
+            .success-message {
+                text-align: center;
+                padding: 2rem;
+            }
+    
+            .success-message i {
+                font-size: 5rem;
+                color: #28a745;
+                margin-bottom: 1rem;
+            }
+    
+            .receipt {
+                border: 1px solid #ddd;
+                padding: 1.5rem;
+                border-radius: 5px;
+                margin-top: 2rem;
+                background-color: #fcfcfc;
+            }
+    
+            .receipt-header {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 1.5rem;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 1rem;
+            }
+    
+            .receipt-body {
+                margin-bottom: 1.5rem;
+            }
+    
+            .receipt-row {
+                display: flex;
+                margin-bottom: 0.5rem;
+            }
+    
+            .receipt-label {
+                font-weight: 500;
+                width: 40%;
+            }
+    
+            .receipt-value {
+                width: 60%;
+            }
+    
+            .receipt-footer {
+                text-align: center;
+                margin-top: 2rem;
+                color: var(--dark);
+                font-size: 0.9rem;
+            }
+    
+            .action-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+    
+            @media (max-width: 768px) {
+                .navbar {
+                    padding: 0.8rem 1rem;
+                }
+    
+                .form-row {
+                    flex-direction: column;
+                    gap: 0;
+                }
+    
+                .step-indicator {
+                    display: none;
+                }
+    
+                .container {
+                    padding: 1rem;
+                    margin: 1rem;
+                }
+            }

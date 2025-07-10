@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XAcademy - Boletins Escolares</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a0ca3;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-circle {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+        
+        .logo-circle span {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a i {
+            margin-right: 5px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            position: relative;
+            font-size: 2.2rem;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .course-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .course-tab {
+            padding: 12px 20px;
+            background-color: #fff;
+            color: var(--dark);
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .course-tab i {
+            margin-right: 8px;
+            color: var(--accent);
+        }
+
+        .course-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .course-tab.active {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        .course-tab.active i {
+            color: var(--secondary);
+        }
+
+        .boletim {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .boletim.active {
+            display: block;
+        }
+
+        .boletim-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .school-logo {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        .boletim-title {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .boletim-subtitle {
+            color: var(--dark);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .student-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-group {
+            flex: 1 1 250px;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .info-value {
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .grades-table th, .grades-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .grades-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .grades-table th:first-child {
+            text-align: left;
+            border-radius: 5px 0 0 0;
+        }
+
+        .grades-table th:last-child {
+            border-radius: 0 5px 0 0;
+        }
+
+        .grades-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .grades-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .grades-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .grade-input {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border 0.3s;
+        }
+
+        .grade-input:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+
+        .final-grade {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .observations {
+            margin-top: 30px;
+        }
+
+        .observations-title {
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .observations-content {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .signature-line {
+            text-align: center;
+            flex: 1;
+            max-width: 200px;
+            margin: 0 10px;
+        }
+
+        .signature-space {
+            border-bottom: 1px solid var(--dark);
+            margin-bottom: 5px;
+            padding-bottom: 20px;
+        }
+
+        .signature-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 14px;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+        }
+
+        .student-select {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: white;
+            display: block;
+            font-size: 16px;
+            color: var(--dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .boletim {
+                padding: 20px 15px;
+            }
+            
+            .grades-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .course-tab {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+            
+            .signatures {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .signature-line {
+                margin-bottom: 20px;
+            }
+        }
+
+        .help-text {
+            text-align: center;
+            color: #666;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .grade-info {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 999;
+            animation: pulse 2s infinite;
+            text-decoration: none;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <div class="logo-circle"><span>X</span></div>
+            <span>Academy</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="#" class="active"><i class="fas fa-chart-bar"></i> Boletins</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Boletins Escolares</h1>
+        
+        <select id="studentSelect" class="student-select">
+            <option value="">Selecione um aluno</option>
+            <option value="1">Ana Silva - Turma A</option>
+            <option value="2">Carlos Santos - Turma B</option>
+            <option value="3">Mariana Oliveira - Turma C</option>
+            <option value="4">Paulo Rodrigues - Turma D</option>
+        </select>
+
+        <div class="course-tabs">
+            <button class="course-tab active" data-course="informatica">
+                <i class="fas fa-laptop-code"></i> Informática de Gestão
+            </button>
+            <button class="course-tab" data-course="gestao">
+                <i class="fas fa-briefcase"></i> Gestão Empresarial
+            </button>
+            <button class="course-tab" data-course="recursos">
+                <i class="fas fa-users"></i> Gestão de Recursos Humanos
+            </button>
+            <button class="course-tab" data-course="contabilidade">
+                <i class="fas fa-calculator"></i> Contabilidade
+            </button>
+        </div>
+
+        <div id="informatica" class="boletim active">
+            <div class="boletim-header">
+                <div class="school-logo">X</div>
+                <h2 class="boletim-title">Boletim Escolar</h2>
+                <p class="boletim-subtitle">Instituição: XAcademy</p>
+                <p class="boletim-subtitle">Ano Letivo: 2025</p>
+            </div>
+
+            <div class="student-info">
+                <div class="info-group">
+                    <span class="info-label">Nome do Aluno:</span>
+                    <span class="info-value" id="studentName">Selecione um aluno</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Turma:</span>
+                    <span class="info-value" id="studentClass">--</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Curso:</span>
+                    <span class="info-value">Informática de Gestão</span>
+                </div>
+            </div>
+
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>Disciplina</th>
+                        <th>1º Trimestre</th>
+                        <th>2º Trimestre</th>
+                        <th>3º Trimestre</th>
+                        <th>Média Final</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Matemática Aplicada</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Programação</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Redes de Computadores</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Sistemas de Informação</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Gestão de Projetos</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Base de Dados</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Estatística Aplicada</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Empreendedorismo</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Inglês Técnico</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="grade-info">
+                A média final é calculada automaticamente como a média aritmética dos três trimestres.
+            </div>
+
+            <div class="observations">
+                <h3 class="observations-title">Observações:</h3>
+                <div class="observations-content" contenteditable="true" placeholder="Insira as observações aqui..."></div>
+            </div>
+
+            <div class="signatures">
+                <div class="signature-line">
+                    <div class="signature-space"></div>
+                    <div class="signature-label">Assinatura do Diretor</div>
+                </div>
+                <div class="signature-line">
+                    <div class="signature-space"></div>
+                    <div class="signature-label">Data: ___/___/____</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary"><i class="fas fa-save"></i> Salvar</button>
+                <button class="btn btn-secondary" onclick="printBoletim()"><i class="fas fa-print"></i> Imprimir</button>
+            </div>
+
+            <p class="help-text">Clique nos campos de notas para editar e a média será calculada automaticamente.</p>
+        </div>
+
+        <div id="gestao" class="boletim">
+            <div class="boletim-header">
+                <div class="school-logo">X</div>
+                <h2 class="boletim-title">Boletim Escolar</h2>
+                <p class="boletim-subtitle">Instituição: XAcademy</p>
+                <p class="boletim-subtitle">Ano Letivo: 2025</p>
+            </div>
+
+            <div class="student-info">
+                <div class="info-group">
+                    <span class="info-label">Nome do Aluno:</span>
+                    <span class="info-value" id="studentName2">Selecione um aluno</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Turma:</span>
+                    <span class="info-value" id="studentClass2">--</span>
+                </div>
+                <div class="info-group">
+                    <span class="info-label">Curso:</span>
+                    <span class="info-value">Gestão Empresarial</span>
+                </div>
+            </div>
+
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>Disciplina</th>
+                        <th>1º Trimestre</th>
+                        <th>2º Trimestre</th>
+                        <th>3º Trimestre</th>
+                        <th>Média Final</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Matemática Financeira</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Economia</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Contabilidade</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Marketing</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Direito Empresarial</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Gestão de Recursos Humanos</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Estatística</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Informática Aplicada</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                    <tr>
+                        <td>Planejamento Estratégico</td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td><input type="number" min="0" max="20" class="grade-input" oninput="calculateAverage(this)"></td>
+                        <td class="final-grade">--</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="grade-info">
+                A média final é calculada automaticamente como a média aritmética dos três trimestres.
+            </div>
+
+            <div class="observations">
+                <h3 class="observations-title">Observações:</h3>
+                <div class="observations-content" contenteditable="true" placeholder="Insira as observações aqui..."></div>
+            </div>
+
+            <div class="signatures">
+                <div class="signature-line">
+                    <div class="signature-space"></div>
+                    <div class="signature-label">Assin

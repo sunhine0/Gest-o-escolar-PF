@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrícula - X Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/matricula.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+   
+</head>
+<body>
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+
+    <nav class="navbar">
+        <a href="paginainicial.html" class="logo">
+            <div class="logo-circle"><span>X</span></div>
+            <span>Academy</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="paginainicial.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="#"><i class="fas fa-info-circle"></i> Sobre</a></li>
+            <li><a href="#"><i class="fas fa-book"></i> Cursos</a></li>
+            <li><a href="#"><i class="fas fa-phone"></i> Contacto</a></li>
+        </ul>
+    </nav>
+
+    <div class="container" id="form-container">
+        <div class="form-header">
+            <h1>Formulário de Matrícula</h1>
+            <p>Preencha todos os campos abaixo para completar a sua matrícula na X Academy</p>
+        </div>
+
+        <form id="inscricao-form">
+            <!-- SEÇÃO 1: INFORMAÇÕES PESSOAIS -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-user"></i> 1️⃣ Informações Pessoais</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome"><i class="fas fa-user-alt"></i> Nome Completo</label>
+                        <input type="text" id="nome" name="nome" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dataNascimento"><i class="fas fa-birthday-cake"></i> Data de Nascimento</label>
+                        <input type="date" id="dataNascimento" name="dataNascimento" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="genero"><i class="fas fa-venus-mars"></i> Gênero</label>
+                        <select id="genero" name="genero" class="form-control" required>
+                            <option value="">Selecione</option>
+                            <option value="masculino">Masculino</option>
+                            <option value="feminino">Feminino</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="identificacao"><i class="fas fa-id-card"></i> Número de Identificação (BI ou Passaporte)</label>
+                        <input type="text" id="identificacao" name="identificacao" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefone"><i class="fas fa-phone"></i> Telefone de Contato</label>
+                        <input type="tel" id="telefone" name="telefone" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> E-mail (opcional)</label>
+                        <input type="email" id="email" name="email" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="endereco"><i class="fas fa-map-marker-alt"></i> Endereço Completo</label>
+                        <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Rua, Bairro, Cidade, Província, País" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: INFORMAÇÕES ACADÊMICAS -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-graduation-cap"></i> 2️⃣ Informações Acadêmicas</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="escola"><i class="fas fa-school"></i> Nome da Escola</label>
+                        <select id="escola" name="escola" class="form-control" required>
+                            <option value="">Selecione</option>
+                            <option value="Pensador do Futuro">Pensador do Futuro</option>
+                            <option value="HOBS - Geração do Conhecimento">HOBS - Geração do Conhecimento</option>
+                            <option value="Arco-Íris">Arco-Íris</option>
+                            <option value="Loide Laura">Loide Laura</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="classe"><i class="fas fa-layer-group"></i> Classe</label>
+                        <select id="classe" name="classe" class="form-control" required>
+                            <option value="">Selecione</option>
+                            <option value="10ª">10ª</option>
+                            <option value="11ª">11ª</option>
+                            <option value="12ª">12ª</option>
+                            <option value="13ª">13ª</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="curso"><i class="fas fa-book-open"></i> Curso</label>
+                        <select id="curso" name="curso" class="form-control" required>
+                            <option value="">Selecione</option>
+                            <option value="Informática de Gestão" data-price="18500">Informática de Gestão - 18.500 Kz/mês</option>
+                            <option value="Contabilidade" data-price="15000">Contabilidade - 15.000 Kz/mês</option>
+                            <option value="Eletricidade" data-price="16500">Eletricidade - 16.500 Kz/mês</option>
+                            <option value="Gestão Empresarial" data-price="17000">Gestão Empresarial - 17.000 Kz/mês</option>
+                            <option value="Técnicas de Enfermagem" data-price="19000">Técnicas de Enfermagem - 19.000 Kz/mês</option>
+                            <option value="Análises Clínicas" data-price="19500">Análises Clínicas - 19.500 Kz/mês</option>
+                            <option value="Gestão de Recursos Humanos" data-price="16000">Gestão de Recursos Humanos - 16.000 Kz/mês</option>
+                            <option value="Máquinas e Motores" data-price="17500">Máquinas e Motores - 17.500 Kz/mês</option>
+                            <option value="Economia e Jurídica" data-price="16800">Economia e Jurídica - 16.800 Kz/mês</option>
+                            <option value="Construção Civil" data-price="18000">Construção Civil - 18.000 Kz/mês</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="periodo"><i class="fas fa-clock"></i> Período</label>
+                        <select id="periodo" name="periodo" class="form-control" required>
+                            <option value="">Selecione</option>
+                            <option value="Manhã">Manhã</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noite">Noite</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sala"><i class="fas fa-door-open"></i> Sala</label>
+                        <input type="number" id="sala" name="sala" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="turma"><i class="fas fa-users"></i> Turma</label>
+                        <input type="text" id="turma" name="turma" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="numeroAluno"><i class="fas fa-hashtag"></i> Número do Aluno</label>
+                        <input type="text" id="numeroAluno" name="numeroAluno" class="form-control" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: TAXAS E VALORES -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-money-bill-wave"></i> 3️⃣ Taxas e Valores</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="valorMatricula"><i class="fas fa-file-invoice"></i> Valor da Matrícula (Kz)</label>
+                        <input type="text" id="valorMatricula" name="valorMatricula" class="form-control" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="valorCartao"><i class="fas fa-id-card"></i> Valor do Cartão de Estudante (Kz)</label>
+                        <input type="text" id="valorCartao" name="valorCartao" class="form-control" value="2.500" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="valorPropina"><i class="fas fa-money-check"></i> Valor da Propina Mensal (Kz)</label>
+                        <input type="text" id="valorPropina" name="valorPropina" class="form-control" readonly>
+                    </div>
+                </div>
+                
+                <div class="price-info">
+                    <h3 class="mb-3"><i class="fas fa-receipt"></i> Resumo de Pagamentos</h3>
+                    <div class="price-row">
+                        <span>Matrícula:</span>
+                        <span id="resumo-matricula">0 Kz</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Cartão de Estudante:</span>
+                        <span id="resumo-cartao">2.500 Kz</span>
+                    </div>
+                    <div class="price-row">
+                        <span>1ª Mensalidade:</span>
+                        <span id="resumo-propina">0 Kz</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Total a Pagar:</span>
+                        <span id="resumo-total">2.500 Kz</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: DADOS DO RESPONSÁVEL FINANCEIRO -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-user-tie"></i> 4️⃣ Dados do Responsável Financeiro</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nomeResponsavel"><i class="fas fa-user-alt"></i> Nome Completo</label>
+                        <input type="text" id="nomeResponsavel" name="nomeResponsavel" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="biResponsavel"><i class="fas fa-id-card"></i> Número do BI</label>
+                        <input type="text" id="biResponsavel" name="biResponsavel" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefoneResponsavel"><i class="fas fa-phone"></i> Telefone de Contato</label>
+                        <input type="tel" id="telefoneResponsavel" name="telefoneResponsavel" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emailResponsavel"><i class="fas fa-envelope"></i> E-mail (opcional)</label>
+                        <input type="email" id="emailResponsavel" name="emailResponsavel" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 5: MÉTODOS DE PAGAMENTO -->
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-money-check-alt"></i> 5️⃣ Métodos de Pagamento</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-credit-card"></i> Forma de Pagamento</label>
+                        <div class="payment-options">
+                            <div class="payment-option" data-payment="express">
+                                <i class="fas fa-exchange-alt fa-2x"></i>
+                                <p>Express a Express</p>
+                            </div>
+                            <div class="payment-option" data-payment="iban">
+                                <i class="fas fa-university fa-2x"></i>
+                                <p>IBAN</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="express-details" class="payment-details">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bancosExpress"><i class="fas fa-university"></i> Selecionar Banco</label>
+                            <select id="bancosExpress" name="bancosExpress" class="form-control">
+                                <option value="">Selecione</option>
+                                <option value="BIC">BIC</option>
+                                <option value="Atlântico">Atlântico</option>
+                                <option value="BAI">BAI</option>
+                                <option value="BFA">BFA</option>
+                                <option value="BPC">BPC</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="expressNumero"><i class="fas fa-hashtag"></i> Express</label>
+                            <input type="text" id="expressNumero" name="expressNumero" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="iban-details" class="payment-details">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bancosIban"><i class="fas fa-university"></i> Selecionar Banco</label>
+                            <select id="bancosIban" name="bancosIban" class="form-control">
+                                <option value="">Selecione</option>
+                                <option value="BIC">BIC</option>
+                                <option value="Atlântico">Atlântico</option>
+                                <option value="BAI">BAI</option>
+                                <option value="BFA">BFA</option>
+                                <option value="BPC">BPC</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ibanNumero"><i class="fas fa-hashtag"></i> IBAN</label>
+                            <input type="text" id="ibanNumero" name="ibanNumero" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINALIZAÇÃO -->
+            <div class="form-section">
+                <div class="terms">
+                    <input type="checkbox" id="termos" name="termos" required>
+                    <label for="termos">Eu aceito os <a href="#" style="color: var(--primary);">Termos e Condições</a> da X Academy e confirmo que todas as informações fornecidas são verdadeiras.</label>
+                </div>
+
+                <div class="form-footer">
+                    <button type="button" class="btn"><i class="fas fa-arrow-left"></i> Voltar</button>
+                    <button type="submit" class="btn btn-accent" id="confirmar-inscricao"><i class="fas fa-check-circle"></i> Confirmar Matrícula</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- TELA DE CONFIRMAÇÃO -->
+    <div class="container confirmation" id="confirmation-container">
+        <div class="form-header">
+            <i class="fas fa-check-circle fa-3x" style="color: var(--accent);"></i>
+            <h2>Matrícula Realizada com Sucesso!</h2>
+            <p>Obrigado por se matricular na X Academy. Abaixo estão os detalhes da sua matrícula.</p>
+            <div class="confirmation-number">
+                <p>Seu número de matrícula é: <span id="matricula-numero">XXXX</span></p>
+            </div>
+        </div>
+
+        <div class="receipt" id="receipt-content">
+            <h3><i class="fas fa-file-alt"></i> Comprovante de Matrícula</h3>
+            <div id="recibo-detalhes">
+                <!-- Os detalhes serão preenchidos pelo JavaScript -->
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="imprimir"><i class="fas fa-print"></i> Imprimir</button>
+            <button class="btn" id="salvar-pdf"><i class="fas fa-file-pdf"></i> Salvar como PDF</button>
+            <button class="btn btn-accent" id="voltar-inicio"><i class="fas fa-home"></i> Voltar ao Início</button>
+        </div>
+    </div>
+
+
+
+    <script src="assets/js/matricula.js"> </script>
+</body>
+</html>
+  

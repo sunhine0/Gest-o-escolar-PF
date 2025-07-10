@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XAcademy - Portal Educacional</title>
+    <link rel="stylesheet" href="assets/css/paginainicial.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+</head>
+<body>
+    <nav class="navbar">
+        <a href="paginainicial.html" class="logo">
+            <div class="logo-circle"><span>X</span></div>
+            <span>Academy</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="paginainicial.html"><i class="fas fa-home"></i> Início</a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-graduation-cap"></i> Cursos</a>
+                <div class="dropdown-content">
+                    <!-- Lista expandida de cursos -->
+                    <a href="#"><i class="fas fa-calculator"></i> Contabilidade</a>
+                    <a href="#"><i class="fas fa-users"></i> Gestão de Recursos Humanos</a>
+                    <a href="#"><i class="fas fa-laptop-code"></i> Informática de Gestão</a>
+                    <a href="#"><i class="fas fa-lightbulb"></i> Eletricidade</a>
+                    <a href="#"><i class="fas fa-briefcase"></i> Gestão Empresarial</a>
+                    <a href="#"><i class="fas fa-heartbeat"></i> Técnicas de Enfermagem</a>
+                    <a href="#"><i class="fas fa-flask"></i> Análises Clínicas</a>
+                    <a href="#"><i class="fas fa-cogs"></i> Máquinas e Motores</a>
+                    <a href="#"><i class="fas fa-chart-line"></i> Economia</a>
+                    <a href="#"><i class="fas fa-gavel"></i> Jurídica</a>
+                    <a href="#"><i class="fas fa-hard-hat"></i> Construção Civil</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-layer-group"></i> Classes</a>
+                <div class="dropdown-content">
+                    <a href="#"><i class="fas fa-arrow-right"></i> 10ª Classe</a>
+                    <a href="#"><i class="fas fa-arrow-right"></i> 11ª Classe</a>
+                    <a href="#"><i class="fas fa-arrow-right"></i> 12ª Classe</a>
+                    <a href="#"><i class="fas fa-arrow-right"></i> 13ª Classe</a>
+                </div>
+            </li>
+            <li><a href="pagamentos.html"><i class="fas fa-credit-card"></i> Pagamentos</a></li>
+            <li><a href="boletin.html"><i class="fas fa-chart-bar"></i> Boletins</a></li>
+            <li><a href="notificacao.html"><i class="fas fa-bell"></i> Notificações</a></li>
+            <li><a href="eventos.html"><i class="fas fa-calendar-alt"></i> Eventos</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Bem-vindo à X Academy</h1>
+            <p>Sua jornada para o sucesso acadêmico e profissional começa aqui. Oferecemos educação de qualidade com foco no seu futuro.</p>
+            <!-- Botão de inscrição agora abre um modal ao invés de link direto -->
+            <a href="#" class="btn" id="inscricao-btn"><i class="fas fa-user-plus"></i> Inscrever-se</a>
+        </div>
+    </div>
+
+    <!-- Modal de inscrição que aparece ao clicar no botão Inscrever-se -->
+    <div id="inscricao-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Bem-vindo à XAcademy</h2>
+            <p>Escolha uma das opções abaixo para continuar:</p>
+            <div class="modal-buttons">
+                <a href="matricula.html" class="btn modal-btn"><i class="fas fa-user-plus"></i> Fazer Matrícula</a>
+                <a href="confirmacao.html" class="btn modal-btn"><i class="fas fa-check-circle"></i> Fazer Confirmação</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Nossos Cursos</h2>
+            <div class="cards">
+                <!-- Card existente -->
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/contabilidade.jpg" alt="Contabilidade">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-calculator"></i> Contabilidade</h3>
+                        <p class="card-text">Desenvolva habilidades essenciais em contabilidade financeira, auditoria e análise fiscal para impulsionar sua carreira.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <!-- Card existente -->
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/RHG.jpg" alt="Recursos Humanos">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-users"></i> Gestão de Recursos Humanos</h3>
+                        <p class="card-text">Aprenda a gerenciar talentos, criar políticas de RH e desenvolver estratégias eficazes de gestão de pessoas.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <!-- Card existente -->
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/inf.jpg" alt="Informática de Gestão">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-laptop-code"></i> Informática de Gestão</h3>
+                        <p class="card-text">Combine habilidades tecnológicas com conhecimentos de gestão para otimizar processos empresariais.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <!-- Novos cards de cursos -->
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/electrecidade.jpg" alt="Eletricidade">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-lightbulb"></i> Eletricidade</h3>
+                        <p class="card-text">Aprenda os fundamentos de sistemas elétricos, instalações e manutenção para uma carreira técnica promissora.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/infermagem.jpg" alt="Técnicas de Enfermagem">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-heartbeat"></i> Técnicas de Enfermagem</h3>
+                        <p class="card-text">Desenvolva habilidades essenciais para o cuidado de pacientes e apoio às equipes de saúde em diversos ambientes.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/analise.jpg" alt="Análises Clínicas">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-flask"></i> Análises Clínicas</h3>
+                        <p class="card-text">Domine técnicas e procedimentos laboratoriais para análises bioquímicas, hematológicas e microbiológicas.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/maquinas.jpg" alt="Máquinas e Motores">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-cogs"></i> Máquinas e Motores</h3>
+                        <p class="card-text">Estude o funcionamento, manutenção e reparo de diferentes tipos de motores e sistemas mecânicos.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/economia.jpg" alt="Economia">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-chart-line"></i> Economia</h3>
+                        <p class="card-text">Compreenda os princípios econômicos, análise de mercados e políticas financeiras para tomada de decisões estratégicas.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/juridica.jpg" alt="Jurídica">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-gavel"></i> Jurídica</h3>
+                        <p class="card-text">Explore os fundamentos do direito e desenvolva uma compreensão abrangente do sistema jurídico e suas aplicações práticas.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-img">
+                        <img src="assets/img/construction-engineer.jpg" alt="Construção Civil">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="fas fa-hard-hat"></i> Construção Civil</h3>
+                        <p class="card-text">Aprenda técnicas de construção, leitura de projetos arquitetônicos e gestão de obras para uma carreira sólida no setor.</p>
+                        <a href="#" class="btn">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background-color: #f0f4ff;">
+        <div class="container">
+            <h2 class="section-title">Nossos Serviços</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-user-plus"></i></div>
+                    <h3>Inscrição de Alunos</h3>
+                    <p>Processo simplificado de inscrição online com documentação digital e acompanhamento em tempo real.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-money-bill-wave"></i></div>
+                    <h3>Pagamento de Propinas</h3>
+                    <p>Sistema seguro de pagamento online com múltiplas opções e comprovantes digitais.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Boletins Escolares</h3>
+                    <p>Acesso digital aos boletins de notas e desempenho acadêmico com histórico completo.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-bell"></i></div>
+                    <h3>Notificações</h3>
+                    <p>Receba alertas sobre prazos, eventos e informações importantes diretamente no seu dispositivo.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-comment-dots"></i></div>
+                    <h3>Reclamações</h3>
+                    <p>Canal direto para envio de sugestões e reclamações com acompanhamento do status.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"><i class="fas fa-calendar-day"></i></div>
+                    <h3>Eventos</h3>
+                    <p>Calendário completo de eventos acadêmicos, culturais e profissionais com inscrição online.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Sobre a XAcademy</h3>
+                    <p>Somos uma instituição de ensino comprometida com a excelência acadêmica e o desenvolvimento profissional dos nossos alunos.</p>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Links Rápidos</h3>
+                    <div class="footer-links">
+                        <a href="matricula.html"><i class="fas fa-chevron-right"></i> Inscrições</a>
+                        <a href="pagamentos.html"><i class="fas fa-chevron-right"></i> Propinas</a>
+                        <a href="#"><i class="fas fa-chevron-right"></i> Cursos</a>
+                        <a href="eventos.html"><i class="fas fa-chevron-right"></i> Eventos</a>
+                        <a href="#"><i class="fas fa-chevron-right"></i> Contato</a>
+                        <!-- Link adicionado sobre o desenvolvedor -->
+                        <a href="assets/cool-responsive-portfolio-main/index.html"    target="_blank"><i class="fas fa-code"></i> Sobre o Desenvolvedor</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p><i class="fas fa-envelope"></i> Email: info@xacademy.com</p>
+                    <p><i class="fas fa-phone"></i> Telefone: +123 456 7890</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Endereço: Avenida Principal, 123</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 XAcademy. Todos os direitos reservados.</p>
+                <div class="developer">
+                    <p>Desenvolvido por <a href="mailto:sunshineraimundo32@gmail.com">Erick Raimundo</a> | Fullstack Developer</p>
+                    <p>Contacto: <a href="tel:+244943410468">+244 943 410 468</a> | Email: <a href="mailto:sunshineraimundo32@gmail.com">sunshineraimundo32@gmail.com</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/244943410468" class="whatsapp-button"   title="Fale Conosco"      target="_blank" >
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+
+    <!-- Script para funcionalidade do modal -->
+    <script src="assets/js/paginainicial.js"></script>
+</body>
+</html>

@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação de Reinscrição</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a0ca3;
+            --secondary: #4cc9f0;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            color: var(--dark);
+            padding-bottom: 50px;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .logo-circle {
+            width: 35px;
+            height: 35px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        .logo-circle span {
+            color: white;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            position: relative;
+        }
+        
+        .form-header::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            margin: 10px auto;
+            border-radius: 3px;
+        }
+        
+        .section-title {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 20px 0 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        
+        .col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 200px;
+        }
+        
+        .checkbox-container {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .checkbox-label input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .payment-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2a097d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(58, 12, 163, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background-color: #e60e73;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.2);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+        }
+        
+        .btn-upload {
+            background-color: var(--secondary);
+            color: white;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-upload:hover {
+            background-color: #3ab4db;
+            transform: translateY(-2px);
+        }
+        
+        .file-upload {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .file-upload input {
+            display: none;
+        }
+        
+        .file-name {
+            margin-left: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .success-message i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .success-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .success-message h3 {
+            margin: 10px 0;
+        }
+        
+        .transcript-status {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .approved {
+            background-color: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .failed {
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px 15px;
+                padding: 20px;
+            }
+            
+            .col {
+                flex: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="paginainicial.html" class="logo">
+            <div class="logo-circle"><span>X</span></div>
+            <span>Academy</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="paginainicial.html"><i class="fas fa-home"></i> Início</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <div class="form-header">
+            <h2><i class="fas fa-user-graduate"></i> Confirmação de Reinscrição</h2>
+        </div>
+
+        <form id="registrationForm">
+            <!-- Dados Pessoais -->
+            <div class="section-title">
+                <i class="fas fa-user"></i> 1️⃣ Dados Pessoais
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="fullName"><i class="fas fa-user-tag"></i> Nome Completo:</label>
+                        <input type="text" id="fullName" class="form-control" placeholder="Nome do aluno" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="idNumber"><i class="fas fa-id-card"></i> Número de Identificação (BI ou Passaporte):</label>
+                        <input type="text" id="idNumber" class="form-control" placeholder="Número" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="birthDate"><i class="fas fa-calendar-alt"></i> Data de Nascimento:</label>
+                        <input type="date" id="birthDate" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="contact"><i class="fas fa-phone"></i> Contato Atualizado:</label>
+                        <input type="text" id="contact" class="form-control" placeholder="Telefone / E-mail" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="address"><i class="fas fa-map-marker-alt"></i> Endereço:</label>
+                <input type="text" id="address" class="form-control" placeholder="Endereço completo" required>
+            </div>
+            
+            <!-- Informações Acadêmicas -->
+            <div class="section-title">
+                <i class="fas fa-school"></i> 2️⃣ Informações Acadêmicas
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="schoolName"><i class="fas fa-building"></i> Nome da Escola:</label>
+                        <select id="schoolName" class="form-control" required>
+                            <option value="">Selecione a escola</option>
+                            <option value="Pensador do Futuro">Pensador do Futuro</option>
+                            <option value="HOBS">HOBS</option>
+                            <option value="Arco-Íris">Arco-Íris</option>
+                            <option value="Loide Laura">Loide Laura</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="currentClass"><i class="fas fa-chalkboard"></i> Classe Atual:</label>
+                        <select id="currentClass" class="form-control" required>
+                            <option value="">Selecione a classe</option>
+                            <option value="10ª">10ª</option>
+                            <option value="11ª">11ª</option>
+                            <option value="12ª">12ª</option>
+                            <option value="13ª">13ª</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="course"><i class="fas fa-laptop-code"></i> Curso:</label>
+                        <select id="course" class="form-control" required>
+                            <option value="">Selecione o curso</option>
+                            <option value="Informática de Gestão">Informática de Gestão</option>
+                            <option value="Contabilidade">Contabilidade</option>
+                            <option value="Eletricidade">Eletricidade</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="roomNumber"><i class="fas fa-door-open"></i> Sala:</label>
+                        <input type="text" id="roomNumber" class="form-control" placeholder="Número da sala" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="classGroup"><i class="fas fa-users"></i> Turma:</label>
+                        <input type="text" id="classGroup" class="form-control" placeholder="Letra/número da turma" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="period"><i class="fas fa-clock"></i> Período:</label>
+                        <select id="period" class="form-control" required>
+                            <option value="">Selecione o período</option>
+                            <option value="Manhã">Manhã</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Noite">Noite</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="studentNumber"><i class="fas fa-hashtag"></i> Número do Aluno:</label>
+                <input type="text" id="studentNumber" class="form-control" placeholder="Número gerado" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-file-alt"></i> Boletim de Notas (em PDF ou imagem):</label>
+                <div class="file-upload">
+                    <label for="transcriptFile" class="btn btn-upload">
+                        <i class="fas fa-upload"></i> Carregar Arquivo
+                    </label>
+                    <input type="file" id="transcriptFile" accept=".pdf,image/*" required>
+                    <span class="file-name" id="fileName">Nenhum arquivo selecionado</span>
+                </div>
+            </div>
+            
+            <div id="transcriptStatus" class="transcript-status">
+                <p id="statusMessage"></p>
+            </div>
+            
+            <!-- Informações do Responsável Financeiro -->
+            <div class="section-title">
+                <i class="fas fa-money-check-alt"></i> 3️⃣ Informações do Responsável Financeiro
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="guardianName"><i class="fas fa-user-tie"></i> Nome Completo:</label>
+                        <input type="text" id="guardianName" class="form-control" placeholder="Nome do responsável" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="guardianID"><i class="fas fa-id-card-alt"></i> Número do BI:</label>
+                        <input type="text" id="guardianID" class="form-control" placeholder="Número do documento" required>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="guardianContact"><i class="fas fa-phone-alt"></i> Contato:</label>
+                <input type="text" id="guardianContact" class="form-control" placeholder="Telefone / E-mail" required>
+            </div>
+            
+            <!-- Confirmação da Reinscrição -->
+            <div class="section-title">
+                <i class="fas fa-check-circle"></i> 📌 Confirmação da Reinscrição
+            </div>
+            
+            <div class="checkbox-container">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="confirmContinue" required>
+                    <span>Confirmo que desejo continuar os estudos na instituição no próximo período.</span>
+                </label>
+            </div>
+            
+            <div class="checkbox-container">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="confirmCorrect" required>
+                    <span>Confirmo que os dados estão corretos e atualizados.</span>
+                </label>
+            </div>
+            
+            <!-- Pagamento da Taxa de Reconfirmação -->
+            <div class="section-title">
+                <i class="fas fa-credit-card"></i> 📥 Pagamento da Taxa de Reconfirmação
+            </div>
+            
+            <div class="payment-section">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="paymentValue"><i class="fas fa-money-bill-wave"></i> Valor:</label>
+                            <input type="text" id="paymentValue" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="paymentMethod"><i class="fas fa-hand-holding-usd"></i> Forma de Pagamento:</label>
+                            <select id="paymentMethod" class="form-control" required>
+                                <option value="">Selecione a forma de pagamento</option>
+                                <option value="Express">Express a Express</option>
+                                <option value="IBAN">IBAN</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="expressPaymentDiv" class="form-group" style="display:none;">
+                    <label for="expressNumber"><i class="fas fa-mobile-alt"></i> Número Express:</label>
+                    <input type="text" id="expressNumber" class="form-control" readonly>
+                </div>
+                
+                <div id="ibanPaymentDiv" class="form-group" style="display:none;">
+                    <label for="bankSelection"><i class="fas fa-university"></i> Banco Selecionado:</label>
+                    <select id="bankSelection" class="form-control">
+                        <option value="">Selecione o banco</option>
+                        <option value="BIC">BIC</option>
+                        <option value="Atlântico">Atlântico</option>
+                        <option value="BAI">BAI</option>
+                        <option value="BFA">BFA</option>
+                        <option value="BPC">BPC</option>
+                    </select>
+                </div>
+                
+                <div id="ibanNumberDiv" class="form-group" style="display:none;">
+                    <label for="ibanNumber"><i class="fas fa-money-check"></i> IBAN:</label>
+                    <input type="text" id="ibanNumber" class="form-control" readonly>
+                </div>
+            </div>
+            
+            <!-- Botões de Ação -->
+            <div class="btn-group">
+                <button type="button" id="cancelBtn" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</button>
+                <button type="submit" id="confirmBtn" class="btn btn-primary"><i class="fas fa-check-double"></i> Reconfirmar Matrícula</button>
+            </div>
+        </form>
+        
+        <!-- Mensagem de Sucesso (inicialmente oculta) -->
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i>
+            <h3>Reconfirmação realizada com sucesso!</h3>
+            <p>Você pode imprimir ou salvar o comprovante.</p>
+            <div class="success-buttons">
+                <button id="printBtn" class="btn btn-success"><i class="fas fa-print"></i> Imprimir Comprovante</button>
+                <button id="saveBtn" class="btn btn-accent"><i class="fas fa-file-pdf"></i> Salvar como PDF</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gerar número de aluno aleatório
+            const studentId = Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('studentNumber').value = studentId;
+            
+            // Atualizar nome do arquivo ao selecionar
+            document.getElementById('transcriptFile').addEventListener('change', function(e) {
+                const fileName = e.target.files[0] ? e.target.files[0].name : 'Nenhum arquivo selecionado';
+                document.getElementById('fileName').textContent = fileName;
+                
+                if (e.target.files[0]) {
+                    // Simular análise do boletim (aleatoriamente aprovar ou reprovar)
+                    setTimeout(function() {
+                        const statusElement = document.getElementById('transcriptStatus');
+                        const statusMessage = document.getElementById('statusMessage');
+                        const isApproved = Math.random() > 0.3; // 70% chance de aprovação
+                        
+                        statusElement.style.display = 'block';
+                        
+                        if (isApproved) {
+                            statusElement.className = 'transcript-status approved';
+                            statusMessage.innerHTML = '<i class="fas fa-check-circle"></i> Verificação concluída! Aluno aprovado para reconfirmação.';
+                            document.getElementById('confirmBtn').disabled = false;
+                        } else {
+                            statusElement.className = 'transcript-status failed';
+                            statusMessage.innerHTML = '<i class="fas fa-times-circle"></i> Não é possível fazer a confirmação porque você foi reprovado no ano passado.';
+                            document.getElementById('confirmBtn').disabled = true;
+                        }
+                    }, 1500); // Simular tempo de processamento
+                }
+            });
+            
+            // Atualizar valor com base no curso selecionado
+            document.getElementById('course').addEventListener('change', function() {
+                const courseValues = {
+                    'Informática de Gestão': '12.500,00 AOA',
+                    'Contabilidade': '11.000,00 AOA',
+                    'Eletricidade': '13.200,00 AOA',
+                    'Outro': '10.500,00 AOA'
+                };
+                
+                const selectedCourse = this.value;
+                if (selectedCourse && courseValues[selectedCourse]) {
+                    document.getElementById('paymentValue').value = courseValues[selectedCourse];
+                } else {
+                    document.getElementById('paymentValue').value = '';
+                }
+            });
+            
+            // Exibir campos relevantes com base no método de pagamento
+            document.getElementById('paymentMethod').addEventListener('change', function() {
+                const expressDiv = document.getElementById('expressPaymentDiv');
+                const ibanDiv = document.getElementById('ibanPaymentDiv');
+                const ibanNumberDiv = document.getElementById('ibanNumberDiv');
+                
+                if (this.value === 'Express') {
+                    expressDiv.style.display = 'block';
+                    ibanDiv.style.display = 'none';
+                    ibanNumberDiv.style.display = 'none';
+                    
+                    // Gerar número Express aleatório
+                    const expressNumber = '9' + Math.floor(10000000 + Math.random() * 90000000);
+                    document.getElementById('expressNumber').value = expressNumber;
+                    
+                } else if (this.value === 'IBAN') {
+                    expressDiv.style.display = 'none';
+                    ibanDiv.style.display = 'block';
+                    ibanNumberDiv.style.display = 'none';
+                    
+                    document.getElementById('bankSelection').value = '';
+                } else {
+                    expressDiv.style.display = 'none';
+                    ibanDiv.style.display = 'none';
+                    ibanNumberDiv.style.display = 'none';
+                }
+            });
+            
+            // Gerar IBAN ao selecionar banco
+            document.getElementById('bankSelection').addEventListener('change', function() {
+                if (this.value) {
+                    const ibanNumberDiv = document.getElementById('ibanNumberDiv');
+                    ibanNumberDiv.style.display = 'block';
+                    
+                    // Gerar IBAN aleatório
+                    const bankCodes = {
+                        'BIC': 'AO06',
+                        'Atlântico': 'AO02',
+                        'BAI': 'AO03',
+                        'BFA': 'AO01',
+                        'BPC': 'AO04'
+                    };
+                    
+                    const bankCode = bankCodes[this.value] || 'AO00';
+                    const accountNumber = Math.floor(10000000000000000 + Math.random() * 90000000000000000);
+                    const iban = `${bankCode}000${accountNumber}`;
+                    
+                    document.getElementById('ibanNumber').value = iban;
+                } else {
+                    document.getElementById('ibanNumberDiv').style.display = 'none';
+                }
+            });
+            
+            // Processar envio do formulário
+            document.getElementById('registrationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const statusElement = document.getElementById('transcriptStatus');
+                if (statusElement.classList.contains('failed')) {
+                    alert('Não é possível concluir a reconfirmação devido à reprovação.');
+                    return;
+                }
+                
+                // Esconder formulário e mostrar mensagem de sucesso
+                this.style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+            });
+            
+            // Botão Cancelar
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja cancelar? Todos os dados serão perdidos.')) {
+                    resetForm();
+                }
+            });
+            
+            // Botão Imprimir
+            document.getElementById('printBtn').addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Botão Salvar como PDF
+            document.getElementById('saveBtn').addEventListener('click', function() {
+                // Criar dados para o PDF
+                const registrationData = {
+                    studentName: document.getElementById('fullName').value,
+                    studentId: document.getElementById('studentNumber').value,
+                    course: document.getElementById('course').value,
+                    school: document.getElementById('schoolName').value,
+                    class: document.getElementById('currentClass').value,
+                    period: document.getElementById('period').value,
+                    date: new Date().toLocaleDateString('pt-PT')
+                };
+                
+                // Criar um link de download para um arquivo de texto
+                // Em um ambiente real, isso geraria um PDF no servidor
+                const dataStr = `
+                    COMPROVANTE DE RECONFIRMAÇÃO
+                    ---------------------------------
+                    Nome: ${registrationData.studentName}
+                    Número: ${registrationData.studentId}
+                    Escola: ${registrationData.school}
+                    Curso: ${registrationData.course}
+                    Classe: ${registrationData.class}
+                    Período: ${registrationData.period}
+                    Data: ${registrationData.date}
+                    ---------------------------------
+                     RECONFIRMAÇÃO REALIZADA COM SUCESSO!
+                `;
+                
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(dataStr));
+                element.setAttribute('download', `comprovante_${registrationData.studentId}.txt`);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            });
+            
+            // Função para resetar o formulário
+            function resetForm() {
+                document.getElementById('registrationForm').reset();
+                document.getElementById('transcriptStatus').style.display = 'none';
+                document.getElementById('expressPaymentDiv').style.display = 'none';
+                document.getElementById('ibanPaymentDiv').style.display = 'none';
+                document.getElementById('ibanNumberDiv').style.display = 'none';
+                document.getElementById('fileName').textContent = 'Nenhum arquivo selecionado';
+                
+                // Gerar novo número de aluno
+                const studentId = Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('studentNumber').value = studentId;
+            }
+        });
+    </script>
+</body>
+</html>
