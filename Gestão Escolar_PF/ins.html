@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Configurações básicas do documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Inscrição - Pensador do Futuro</title>
+    <!-- Inclusão da biblioteca Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inclusão da biblioteca jsPDF para gerar PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Definição das variáveis CSS para cores do tema */
+        :root {
+            --amarelo-primario: #ffd700;
+            --amarelo-escuro: #f4c210;
+            --amarelo-secundario: #ffe208;
+            --fundo-formulario: #2a2a2a;
+            --branco: #ffffff;
+            --cinza: #8e8e93;
+            --cinza-claro: #f2f2f7;
+            --vidro: rgba(255, 255, 255, 0.1);
+            --borda-vidro: rgba(255, 255, 255, 0.2);
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --sidebar-bg: var(--fundo-formulario);
+            --card-bg: var(--branco);
+            --border-color: #e0e0e0;
+        }
+
+        /* Variáveis para modo escuro */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: var(--fundo-formulario);
+            --text-primary: var(--branco);
+            --text-secondary: var(--cinza);
+            --sidebar-bg: #2a2a2a;
+            --card-bg: var(--fundo-formulario);
+            --border-color: #444444;
+        }
+
+        /* Reset básico para remover margens e paddings padrão */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilo do corpo da página */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Container principal da aplicação */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Barra lateral de navegação (sidebar) */
+        .sidebar {
+            width: 72px;
+            background: var(--amarelo-primario); /* Cor amarela inicial */
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            transition: width 0.3s ease, background 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ajuste no modo dark para a sidebar */
+        [data-theme="dark"] .sidebar {
+            background: var(--sidebar-bg); /* Volta para a cor escura padrão */
+        }
+
+        /* Sidebar expandida ao clicar */
+        .sidebar.ativo {
+            width: 280px;
+        }
+
+        /* Cabeçalho da sidebar (oculto no estado inicial) */
+        .sidebar-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .sidebar.ativo .sidebar-header {
+            display: flex;
+        }
+
+        /* Estilo da imagem do logo */
+        .logo-imagem {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--amarelo-primario), var(--amarelo-escuro));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Conteúdo de texto da sidebar (escondido inicialmente) */
+        .text-content {
+            display: none;
+        }
+
+        .sidebar.ativo .text-content {
+            display: block;
+        }
+
+        .text-content .title {
+            color: #000000; /* Texto preto inicial */
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .text-content .subtitle {
+            color: #000000; /* Texto preto inicial */
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* Botão de fechar (X) */
+        .botao-fechar {
+            display: none;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #000000; /* Texto preto inicial */
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .sidebar.ativo .botao-fechar {
+            display: block;
+        }
+
+        .botao-fechar:hover {
+            color: var(--amarelo-primario);
+        }
+
+        /* Menu de navegação */
+        .nav-menu {
+            list-style: none;
+            padding: 10px 0;
+            flex: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        /* Estilo dos links de navegação */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #000000; /* Ícones e texto preto inicial */
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .sidebar.ativo .nav-link {
+            padding: 12px 20px;
+        }
+
+        .nav-link:hover {
+            background: var(--vidro);
+            color: var(--cinza-claro)
+        }
+
+        .nav-link.active {
+            background: var(--cinza-claro);
+            color: var(--amarelo-primario);
+          
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 15px;
+            color: #000000; /* Ícones pretos inicialmente */
+        }
+
+        .sidebar .nav-link .nav-text {
+            display: none;
+        }
+
+        .sidebar.ativo .nav-link .nav-text {
+            display: inline;
+        }
+
+        /* Botão de toggle do menu */
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #000000; /* Ícone preto inicial */
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .menu-toggle.moved {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--amarelo-primario); /* Manter amarelo no moved */
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .sidebar.ativo .menu-toggle {
+            display: none;
+        }
+
+        .menu-toggle:hover {
+            background: var(--vidro);
+            color: var(--amarelo-primario);
+        }
+
+        /* Área principal de conteúdo */
+        .main-content {
+            flex: 1;
+            margin-left: 72px;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.ativo ~ .main-content {
+            margin-left: 280px;
+        }
+
+        /* Cabeçalho superior */
+        .header {
+            background: var(--bg-secondary);
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--vidro);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--amarelo-primario);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Área de conteúdo do formulário */
+        .conteudo-principal {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Formulário de inscrição */
+        .formulario-inscricao {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .titulo-formulario {
+            text-align: center;
+            margin-bottom: 0;
+            color: var(--amarelo-primario);
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Seções do formulário */
+        .secao-formulario {
+            margin-bottom: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .titulo-secao {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--amarelo-primario);
+            margin-bottom: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--amarelo-primario);
+        }
+
+        /* Grid para campos do formulário */
+        .grid-campos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            width: 100%;
+        }
+
+        .campo-formulario {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .label-campo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .input-campo {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .input-campo:focus {
+            outline: none;
+            border-color: var(--amarelo-primario);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        /* Botões funcionais */
+        .botoes-funcionais {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .botao-funcional {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .botao-limpar {
+            background: var(--cinza);
+            color: var(--branco);
+        }
+
+        .botao-limpar:hover {
+            background: #7a7a7a;
+        }
+
+        .botao-cancelar {
+            background: #dc3545;
+            color: var(--branco);
+        }
+
+        .botao-cancelar:hover {
+            background: #c82333;
+        }
+
+        .botao-salvar {
+            background: var(--amarelo-primario);
+            color: #333;
+        }
+
+        .botao-salvar:hover {
+            background: var(--amarelo-escuro);
+        }
+
+        /* Modal da folha de inscrição */
+        .modal-folha {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .conteudo-modal {
+            background: var(--branco);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .cabecalho-modal {
+            padding: 20px;
+            background: var(--amarelo-primario);
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .botao-fechar-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .corpo-modal {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .folha-inscricao {
+            background: white;
+            color: #333;
+            padding: 30px;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+        }
+
+        .cabecalho-folha {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--amarelo-primario);
+            padding-bottom: 20px;
+        }
+
+        .logo-folha {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .titulo-folha {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitulo-folha {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .dados-folha {
+            margin-bottom: 25px;
+        }
+
+        .secao-dados {
+            margin-bottom: 20px;
+            border: 2px solid #333;
+            padding: 15px;
+        }
+
+        .titulo-secao-folha {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--amarelo-escuro);
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .linha-dados {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 5px;
+        }
+
+        .campo-dados {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .label-dados {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .valor-dados {
+            border-bottom: 1px solid #333;
+            min-width: 200px;
+            display: inline-block;
+        }
+
+        /* Seção de pagamento */
+        .secao-pagamento {
+            background: #f9f9f9;
+            border: 2px solid var(--amarelo-primario);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .info-pagamento {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Seção de assinaturas */
+        .secao-assinaturas {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #333;
+        }
+
+        .assinatura {
+            text-align: center;
+            width: 45%;
+        }
+
+        .linha-assinatura {
+            border-top: 2px solid #333;
+            margin-top: 50px;
+            padding-top: 10px;
+        }
+
+        /* Botões da folha */
+        .botoes-folha {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .botao-folha {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .botao-imprimir {
+            background: #28a745;
+            color: white;
+        }
+
+        .botao-imprimir:hover {
+            background: #218838;
+        }
+
+        .botao-pdf {
+            background: #dc3545;
+            color: white;
+        }
+
+        .botao-pdf:hover {
+            background: #c82333;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 72px;
+                left: -280px;
+            }
+
+            .sidebar.ativo {
+                left: 0;
+                width: 280px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .main-content.ativo {
+                margin-left: 280px;
+            }
+
+            .grid-campos {
+                grid-template-columns: 1fr;
+            }
+
+            .botoes-funcionais {
+                flex-direction: column;
+            }
+
+            .secao-assinaturas {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .assinatura {
+                width: 100%;
+            }
+        }
+
+        /* Estilos para impressão */
+        @media print {
+            .cabecalho-modal,
+            .botoes-folha {
+                display: none !important;
+            }
+
+            .folha-inscricao {
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+            }
+
+            .sidebar,
+            .header,
+            .menu-toggle,
+            .overlay {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Container principal da aplicação -->
+    <div class="app-container">
+        <!-- Barra lateral de navegação -->
+        <aside class="sidebar" id="sidebar">
+            <!-- Botão de toggle do menu no topo -->
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- Cabeçalho da sidebar com logo e informações -->
+            <div class="sidebar-header">
+                <a href="Pagina_inicial.html"><img src="assets/logo/insgtrew.png" alt="Logo da Instituição" class="logo-imagem"></a>
+                <div class="text-content">
+                    <div class="title">Pensador do Futuro</div>
+                    <div class="subtitle">Sistema de Gestão Escolar</div>
+                </div>
+                <button class="botao-fechar" id="fecharSidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Menu de navegação principal -->
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="Painel de Controle">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="nav-text">Painel de Controle</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#pessoas" class="nav-link" data-page="Pessoas">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">Pessoas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#cadastros" class="nav-link active" data-page="Cadastros">
+                            <i class="fas fa-user-plus"></i>
+                            <span class="nav-text">Cadastros</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#turmas" class="nav-link" data-page="Turmas">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span class="nav-text">Turmas / Disciplinas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#financeiro" class="nav-link" data-page="Financeiro">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="nav-text">Financeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="Relatório Financeiro">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span class="nav-text">Rel Financeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="Gerar Contratos">
+                            <i class="fas fa-file-contract"></i>
+                            <span class="nav-text">Gerar Contratos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#sms" class="nav-link" data-page="SMS">
+                            <i class="fas fa-sms"></i>
+                            <span class="nav-text">SMS</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#agenda" class="nav-link" data-page="Agenda">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="nav-text">Tarefas / Agenda</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#anotacoes" class="nav-link" data-page="Anotações">
+                            <i class="fas fa-sticky-note"></i>
+                            <span class="nav-text">Anotações</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#whatsapp" class="nav-link" data-page="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span class="nav-text">Conectar WhatsApp</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#mensalidades" class="nav-link" data-page="Mensalidades">
+                            <i class="fas fa-credit-card"></i>
+                            <span class="nav-text">Mensalidades Sistema</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Área principal de conteúdo -->
+        <main class="main-content" id="mainContent">
+            <!-- Cabeçalho superior -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 class="page-title">Inscrição de Estudante</h1>
+                </div>
+                
+                <div class="header-right">
+                    <!-- Botão de alternância de tema -->
+                    <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- Perfil do usuário -->
+                    <div class="user-profile">
+                        <div class="user-avatar">SGE</div>
+                        <span>SGE</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Área de conteúdo principal -->
+            <div class="conteudo-principal">
+                <!-- Formulário de inscrição -->
+                <form class="formulario-inscricao" id="formularioInscricao">
+                    <h2 class="titulo-formulario">
+                        <i class="fas fa-graduation-cap"></i>
+                        Formulário de Inscrição do Aluno
+                    </h2>
+
+                    <!-- Seção: Dados Pessoais -->
+                    <div class="secao-formulario">
+                        <h3 class="titulo-secao">
+                            <i class="fas fa-user"></i>
+                            Dados Pessoais
+                        </h3>
+                        <div class="grid-campos">
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="nome">Nome completo *</label>
+                                <input type="text" id="nome" name="nome" maxlength="40" required class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="numbi">Número do BI *</label>
+                                <input type="text" id="numbi" name="numbi" maxlength="15" required class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="genero">Gênero *</label>
+                                <select id="genero" name="genero" required class="input-campo">
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                </select>
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="data_nasc">Data de nascimento *</label>
+                                <input type="date" id="data_nasc" name="data_nasc" required class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="estado_civil">Estado civil</label>
+                                <select id="estado_civil" name="estado_civil" class="input-campo">
+                                    <option value="solteiro">Solteiro</option>
+                                    <option value="casado">Casado</option>
+                                    <option value="divorciado">Divorciado</option>
+                                </select>
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="data_inscricao">Data da inscrição</label>
+                                <input type="datetime-local" id="data_inscricao" name="data_inscricao" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="bairro">Bairro</label>
+                                <input type="text" id="bairro" name="bairro" maxlength="50" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="rua">Rua</label>
+                                <input type="text" id="rua" name="rua" maxlength="50" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="nome_pai">Nome do pai</label>
+                                <input type="text" id="nome_pai" name="nome_pai" maxlength="40" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="nome_mae">Nome da mãe</label>
+                                <input type="text" id="nome_mae" name="nome_mae" maxlength="40" class="input-campo">
+                            </div>
+                            <!-- Convertendo província para select com opções -->
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="provincia">Província *</label>
+                                <select id="provincia" name="provincia" required class="input-campo">
+                                    <option value="">Selecione uma província</option>
+                                    <option value="Luanda">Luanda</option>
+                                    <option value="Benguela">Benguela</option>
+                                    <option value="Huambo">Huambo</option>
+                                    <option value="Huíla">Huíla</option>
+                                    <option value="Cabinda">Cabinda</option>
+                                    <option value="Kwanza Sul">Kwanza Sul</option>
+                                    <option value="Kwanza Norte">Kwanza Norte</option>
+                                    <option value="Malanje">Malanje</option>
+                                    <option value="Uíge">Uíge</option>
+                                    <option value="Zaire">Zaire</option>
+                                    <option value="Lunda Norte">Lunda Norte</option>
+                                    <option value="Lunda Sul">Lunda Sul</option>
+                                    <option value="Moxico">Moxico</option>
+                                    <option value="Cuando Cubango">Cuando Cubango</option>
+                                    <option value="Cunene">Cunene</option>
+                                    <option value="Bié">Bié</option>
+                                    <option value="Namibe">Namibe</option>
+                                </select>
+                            </div>
+                            <!-- Convertendo município para select com opções baseadas na província (exemplo simplificado) -->
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="municipio">Município *</label>
+                                <select id="municipio" name="municipio" required class="input-campo">
+                                    <option value="">Selecione um município</option>
+                                    <option value="Luanda">Luanda</option>
+                                    <option value="Benguela">Benguela</option>
+                                    <option value="Huambo">Huambo</option>
+                                    <option value="Lubango">Lubango</option>
+                                    <option value="Cabinda">Cabinda</option>
+                                    <option value="Sumbe">Sumbe</option>
+                                    <option value="Ndalatando">Ndalatando</option>
+                                    <option value="Malanje">Malanje</option>
+                                    <option value="Uíge">Uíge</option>
+                                    <option value="Mbanza Kongo">Mbanza Kongo</option>
+                                </select>
+                            </div>
+                            <!-- Mantendo telefone com máscara -->
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="telefone">Telefone *</label>
+                                <input type="tel" id="telefone" name="telefone" maxlength="15" required class="input-campo" placeholder="XXX XXX XXX">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Dados da Escola Anterior -->
+                    <div class="secao-formulario">
+                        <h3 class="titulo-secao">
+                            <i class="fas fa-school"></i>
+                            Dados da Escola Anterior
+                        </h3>
+                        <div class="grid-campos">
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="escola_anterior">Escola anterior</label>
+                                <input type="text" id="escola_anterior" name="escola_anterior" maxlength="25" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="classe_anterior">Classe anterior</label>
+                                <input type="text" id="classe_anterior" name="classe_anterior" maxlength="4" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="curso_anterior">Curso anterior</label>
+                                <input type="text" id="curso_anterior" name="curso_anterior" maxlength="15" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="data_conclusao">Ano de conclusão</label>
+                                <input type="number" id="data_conclusao" name="data_conclusao" min="1900" max="2100" class="input-campo">
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo" for="status">Status da inscrição</label>
+                                <select id="status" name="status" class="input-campo">
+                                    <option value="em falta">Em falta</option>
+                                    <option value="completo">Completo</option>
+                                    <option value="ativo">Ativo</option>
+                                    <option value="pendente">Pendente</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Informações Financeiras -->
+                    <div class="secao-formulario">
+                        <h3 class="titulo-secao">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Informações Financeiras
+                        </h3>
+                        <div class="grid-campos">
+                            <div class="campo-formulario">
+                                <label class="label-campo">
+                                    <i class="fas fa-credit-card"></i>
+                                    Taxa de Inscrição *
+                                </label>
+                                <input type="number" class="input-campo" id="taxaInscricao" name="taxaInscricao" value="15000" required>
+                            </div>
+                            <div class="campo-formulario">
+                                <label class="label-campo">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                    Forma de Pagamento *
+                                </label>
+                                <select class="input-campo" id="formaPagamento" name="formaPagamento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Dinheiro">Dinheiro</option>
+                                    <option value="Transferência Bancária">Transferência Bancária</option>
+                                    <option value="Multicaixa">Multicaixa</option>
+                                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões funcionais -->
+                    <div class="botoes-funcionais">
+                        <button type="button" class="botao-funcional botao-limpar" onclick="limparFormulario()">
+                            <i class="fas fa-eraser"></i>
+                            Limpar
+                        </button>
+                        <button type="button" class="botao-funcional botao-cancelar" onclick="cancelarFormulario()">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="botao-funcional botao-salvar">
+                            <i class="fas fa-save"></i>
+                            Salvar e Gerar Folha
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal da Folha de Inscrição -->
+    <div class="modal-folha" id="modalFolha">
+        <div class="conteudo-modal">
+            <div class="cabecalho-modal">
+                <h3><i class="fas fa-file-alt"></i> Folha de Inscrição</h3>
+                <button class="botao-fechar-modal" onclick="fecharModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="corpo-modal">
+                <div class="folha-inscricao" id="folhaInscricao">
+                    <div class="cabecalho-folha">
+                        <!-- Substituindo div da logo por imagem -->
+                        <a href="Pagina_inicial.html"><img src="assets/logo/insgtrew.png" alt="Logo da Instituição" class="logo-imagem"></a>
+                        <div class="titulo-folha">COLÉGIO PENSADOR DO FUTURO</div>
+                        <div class="subtitulo-folha">Sistema de Gestão Escolar - Folha de Inscrição</div>
+                    </div>
+
+                    <div class="dados-folha">
+                        <!-- Dados Pessoais na Folha -->
+                        <div class="secao-dados">
+                            <div class="titulo-secao-folha">Dados Pessoais do Estudante</div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Nome Completo:</span>
+                                    <span class="valor-dados" id="folhaNome"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Gênero:</span>
+                                    <span class="valor-dados" id="folhaGenero"></span>
+                                </div>
+                                <div class="campo-dados">
+                                    <span class="label-dados">Data de Nascimento:</span>
+                                    <span class="valor-dados" id="folhaDataNascimento"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Número do BI:</span>
+                                    <span class="valor-dados" id="folhaNumbi"></span>
+                                </div>
+                                <div class="campo-dados">
+                                    <span class="label-dados">Estado Civil:</span>
+                                    <span class="valor-dados" id="folhaEstadoCivil"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Data da Inscrição:</span>
+                                    <span class="valor-dados" id="folhaDataInscricao"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Bairro:</span>
+                                    <span class="valor-dados" id="folhaBairro"></span>
+                                </div>
+                                <div class="campo-dados">
+                                    <span class="label-dados">Rua:</span>
+                                    <span class="valor-dados" id="folhaRua"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Nome do Pai:</span>
+                                    <span class="valor-dados" id="folhaNomePai"></span>
+                                </div>
+                                <div class="campo-dados">
+                                    <span class="label-dados">Nome da Mãe:</span>
+                                    <span class="valor-dados" id="folhaNomeMae"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Província:</span>
+                                    <span class="valor-dados" id="folhaProvincia"></span>
+                                </div>
+                                <div class="campo-dados">
+                                    <span class="label-dados">Município:</span>
+                                    <span class="valor-dados" id="folhaMunicipio"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Telefone:</span>
+                                    <span class="valor-dados" id="folhaTelefone"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dados da Escola Anterior na Folha -->
+                        <div class="secao-dados">
+                            <div class="titulo-secao-folha">Dados da Escola Anterior</div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Escola Anterior:</span>
+                                    <span class="valor-dados" id="folhaEscolaAnterior"></span>
+                                </div>
+                                <div class="campo-dados">
+                                    <span class="label-dados">Classe Anterior:</span>
+                                    <span class="valor-dados" id="folhaClasseAnterior"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Curso Anterior:</span>
+                                    <span class="valor-dados" id="folhaCursoAnterior"></span>
+                                </div>
+                                <div class="campo-dados">
+                                    <span class="label-dados">Ano de Conclusão:</span>
+                                    <span class="valor-dados" id="folhaDataConclusao"></span>
+                                </div>
+                            </div>
+                            <div class="linha-dados">
+                                <div class="campo-dados">
+                                    <span class="label-dados">Status da Inscrição:</span>
+                                    <span class="valor-dados" id="folhaStatus"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informações Financeiras na Folha -->
+                        <div class="secao-pagamento">
+                            <div class="titulo-secao-folha">Informações Financeiras</div>
+                            <div class="info-pagamento">
+                                <p><strong>Taxa de Inscrição:</strong> <span id="folhaTaxaInscricao"></span> Kz</p>
+                                <p><strong>Forma de Pagamento:</strong> <span id="folhaFormaPagamento"></span></p>
+                            </div>
+                        </div>
+
+                        <!-- Seção de Assinaturas -->
+                        <div class="secao-assinaturas">
+                            <div class="assinatura">
+                                <div class="linha-assinatura">
+                                    <strong>Assinatura do Estudante</strong>
+                                </div>
+                            </div>
+                            <div class="assinatura">
+                                <div class="linha-assinatura">
+                                    <strong>Assinatura do Responsável</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #666;">
+                            <p>Data de Inscrição: <span id="dataInscricao"></span></p>
+                            <p><em>Colégio Pensador do Futuro - Formando o Futuro de Angola</em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="botoes-folha">
+                <button class="botao-folha botao-imprimir" onclick="imprimirFolha()">
+                    <i class="fas fa-print"></i>
+                    Imprimir
+                </button>
+                <button class="botao-folha botao-pdf" onclick="gerarPDF()">
+                    <i class="fas fa-file-pdf"></i>
+                    Gerar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais
+        let dadosInscricao = {};
+
+        // Função para alternar tema claro/escuro
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            
+            const icon = themeToggle.querySelector('i');
+            if (newTheme === 'dark') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+            
+            localStorage.setItem('theme', newTheme);
+        });
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        const icon = themeToggle.querySelector('i');
+        if (savedTheme === 'dark') {
+            icon.className = 'fas fa-sun';
+        }
+
+        // Função para toggle do menu lateral
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const fecharSidebar = document.getElementById('fecharSidebar');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.add('ativo');
+            menuToggle.classList.add('moved');
+            mainContent.classList.add('ativo');
+        });
+
+        fecharSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('ativo');
+            menuToggle.classList.remove('moved');
+            mainContent.classList.remove('ativo');
+        });
+
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                const pageTitle = link.getAttribute('data-page');
+                document.querySelector('.page-title').textContent = pageTitle;
+            });
+        });
+
+        // Função para limpar o formulário
+        function limparFormulario() {
+            if (confirm('Tem certeza que deseja limpar todos os campos?')) {
+                document.getElementById('formularioInscricao').reset();
+            }
+        }
+
+        // Função para cancelar o formulário
+        function cancelarFormulario() {
+            if (confirm('Tem certeza que deseja cancelar? Todos os dados serão perdidos.')) {
+                document.getElementById('formularioInscricao').reset();
+                window.location.reload();
+            }
+        }
+
+        document.getElementById('formularioInscricao').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            dadosInscricao = {};
+            
+            for (let [key, value] of formData.entries()) {
+                dadosInscricao[key] = value;
+            }
+            
+            if (!validarFormulario()) {
+                return;
+            }
+            
+            preencherFolhaInscricao();
+            document.getElementById('modalFolha').style.display = 'flex';
+        });
+
+        function validarFormulario() {
+            const camposObrigatorios = ['nome', 'numbi', 'genero', 'data_nasc', 'provincia', 'municipio', 'telefone', 'taxaInscricao', 'formaPagamento'];
+            
+            for (let campo of camposObrigatorios) {
+                const elemento = document.getElementById(campo);
+                if (!elemento.value.trim()) {
+                    alert(`Por favor, preencha o campo: ${elemento.previousElementSibling.textContent}`);
+                    elemento.focus();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function preencherFolhaInscricao() {
+            document.getElementById('folhaNome').textContent = dadosInscricao.nome || '';
+            document.getElementById('folhaGenero').textContent = dadosInscricao.genero || '';
+            document.getElementById('folhaDataNascimento').textContent = formatarData(dadosInscricao.data_nasc) || '';
+            document.getElementById('folhaNumbi').textContent = dadosInscricao.numbi || '';
+            document.getElementById('folhaEstadoCivil').textContent = dadosInscricao.estado_civil || '';
+            document.getElementById('folhaDataInscricao').textContent = dadosInscricao.data_inscricao ? new Date(dadosInscricao.data_inscricao).toLocaleString('pt-BR') : '';
+            document.getElementById('folhaBairro').textContent = dadosInscricao.bairro || '';
+            document.getElementById('folhaRua').textContent = dadosInscricao.rua || '';
+            document.getElementById('folhaNomePai').textContent = dadosInscricao.nome_pai || '';
+            document.getElementById('folhaNomeMae').textContent = dadosInscricao.nome_mae || '';
+            document.getElementById('folhaProvincia').textContent = dadosInscricao.provincia || '';
+            document.getElementById('folhaMunicipio').textContent = dadosInscricao.municipio || '';
+            document.getElementById('folhaTelefone').textContent = dadosInscricao.telefone || '';
+            document.getElementById('folhaEscolaAnterior').textContent = dadosInscricao.escola_anterior || '';
+            document.getElementById('folhaClasseAnterior').textContent = dadosInscricao.classe_anterior || '';
+            document.getElementById('folhaCursoAnterior').textContent = dadosInscricao.curso_anterior || '';
+            document.getElementById('folhaDataConclusao').textContent = dadosInscricao.data_conclusao || '';
+            document.getElementById('folhaStatus').textContent = dadosInscricao.status || '';
+            document.getElementById('folhaTaxaInscricao').textContent = formatarMoeda(dadosInscricao.taxaInscricao) || '';
+            document.getElementById('folhaFormaPagamento').textContent = dadosInscricao.formaPagamento || '';
+            document.getElementById('dataInscricao').textContent = new Date().toLocaleDateString('pt-BR', { timeZone: 'Africa/Luanda' });
+        }
+
+        function formatarData(data) {
+            if (!data) return '';
+            const date = new Date(data);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function formatarMoeda(valor) {
+            if (!valor) return '0,00';
+            return Number(valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+        }
+
+        function fecharModal() {
+            document.getElementById('modalFolha').style.display = 'none';
+        }
+
+        function imprimirFolha() {
+            window.print();
+        }
+
+        function gerarPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            pdf.setFont('helvetica');
+            pdf.setFontSize(18);
+            pdf.setTextColor(255, 215, 0);
+            pdf.text('COLÉGIO PENSADOR DO FUTURO', 105, 20, { align: 'center' });
+            
+            pdf.setFontSize(14);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('Sistema de Gestão Escolar - Folha de Inscrição', 105, 30, { align: 'center' });
+            
+            pdf.setDrawColor(255, 215, 0);
+            pdf.setLineWidth(0.5);
+            pdf.line(20, 35, 190, 35);
+            
+            let y = 50;
+            pdf.addImage('assets/logo/insgtrew.png', 'PNG', 90, 10, 30, 30); // Adicionando a imagem da logo
+            pdf.setFontSize(12);
+            pdf.setTextColor(255, 215, 0);
+            pdf.text('DADOS PESSOAIS DO ESTUDANTE', 20, y);
+            y += 10;
+            
+            pdf.setTextColor(0, 0, 0);
+            pdf.setFontSize(10);
+            pdf.text(`Nome Completo: ${dadosInscricao.nome}`, 20, y);
+            y += 8;
+            pdf.text(`Gênero: ${dadosInscricao.genero}`, 20, y);
+            pdf.text(`Data de Nascimento: ${formatarData(dadosInscricao.data_nasc)}`, 110, y);
+            y += 8;
+            pdf.text(`Número do BI: ${dadosInscricao.numbi}`, 20, y);
+            pdf.text(`Estado Civil: ${dadosInscricao.estado_civil}`, 110, y);
+            y += 8;
+            pdf.text(`Data da Inscrição: ${dadosInscricao.data_inscricao ? new Date(dadosInscricao.data_inscricao).toLocaleString('pt-BR') : ''}`, 20, y);
+            y += 8;
+            pdf.text(`Bairro: ${dadosInscricao.bairro}`, 20, y);
+            pdf.text(`Rua: ${dadosInscricao.rua}`, 110, y);
+            y += 8;
+            pdf.text(`Nome do Pai: ${dadosInscricao.nome_pai}`, 20, y);
+            pdf.text(`Nome da Mãe: ${dadosInscricao.nome_mae}`, 110, y);
+            y += 8;
+            pdf.text(`Província: ${dadosInscricao.provincia}`, 20, y);
+            pdf.text(`Município: ${dadosInscricao.municipio}`, 110, y);
+            y += 8;
+            pdf.text(`Telefone: ${dadosInscricao.telefone}`, 20, y);
+            y += 15;
+            
+            pdf.setFontSize(12);
+            pdf.setTextColor(255, 215, 0);
+            pdf.text('DADOS DA ESCOLA ANTERIOR', 20, y);
+            y += 10;
+            
+            pdf.setTextColor(0, 0, 0);
+            pdf.setFontSize(10);
+            pdf.text(`Escola Anterior: ${dadosInscricao.escola_anterior}`, 20, y);
+            y += 8;
+            pdf.text(`Classe Anterior: ${dadosInscricao.classe_anterior}`, 20, y);
+            pdf.text(`Curso Anterior: ${dadosInscricao.curso_anterior}`, 110, y);
+            y += 8;
+            pdf.text(`Ano de Conclusão: ${dadosInscricao.data_conclusao}`, 20, y);
+            pdf.text(`Status: ${dadosInscricao.status}`, 110, y);
+            y += 15;
+            
+            pdf.setFontSize(12);
+            pdf.setTextColor(255, 215, 0);
+            pdf.text('INFORMAÇÕES FINANCEIRAS', 20, y);
+            y += 10;
+            
+            pdf.setTextColor(0, 0, 0);
+            pdf.setFontSize(10);
+            pdf.text(`Taxa de Inscrição: ${formatarMoeda(dadosInscricao.taxaInscricao)} Kz`, 20, y);
+            y += 8;
+            pdf.text(`Forma de Pagamento: ${dadosInscricao.formaPagamento}`, 20, y);
+            y += 15;
+            
+            if (y > 240) {
+                pdf.addPage();
+                y = 20;
+            }
+            
+            pdf.setFontSize(12);
+            pdf.setTextColor(255, 215, 0);
+            pdf.text('ASSINATURAS', 20, y);
+            y += 20;
+            
+            pdf.setTextColor(0, 0, 0);
+            pdf.setFontSize(10);
+            pdf.line(20, y, 90, y);
+            pdf.text('Assinatura do Estudante', 20, y + 5);
+            pdf.line(110, y, 180, y);
+            pdf.text('Assinatura do Responsável', 110, y + 5);
+            y += 20;
+            
+            pdf.setFontSize(8);
+            pdf.setTextColor(100, 100, 100);
+            pdf.text(`Data de Inscrição: ${new Date().toLocaleDateString('pt-BR', { timeZone: 'Africa/Luanda' })}`, 105, y, { align: 'center' });
+            y += 5;
+            pdf.text('Colégio Pensador do Futuro - Formando o Futuro de Angola', 105, y, { align: 'center' });
+            
+            const nomeArquivo = `Inscricao_${dadosInscricao.nome.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+            pdf.save(nomeArquivo);
+        }
+
+        document.getElementById('modalFolha').addEventListener('click', function(e) {
+            if (e.target === this) {
+                fecharModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modalFolha').style.display === 'flex') {
+                fecharModal();
+            }
+        });
+
+        function calcularIdade(dataNascimento) {
+            const hoje = new Date();
+            const nascimento = new Date(dataNascimento);
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
+            const mesAtual = hoje.getMonth();
+            const mesNascimento = nascimento.getMonth();
+            
+            if (mesAtual < mesNascimento || (mesAtual === mesNascimento && hoje.getDate() < nascimento.getDate())) {
+                idade--;
+            }
+            
+            return idade;
+        }
+
+        function aplicarMascaraTelefone(input) {
+            let valor = input.value.replace(/\D/g, '');
+            valor = valor.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+            input.value = valor;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const camposTelefone = ['telefone'];
+            
+            camposTelefone.forEach(campoId => {
+                const campo = document.getElementById(campoId);
+                if (campo) {
+                    campo.addEventListener('input', function() {
+                        aplicarMascaraTelefone(this);
+                    });
+                }
+            });
+        });
+
+        const camposNumericos = ['taxaInscricao', 'data_conclusao'];
+        camposNumericos.forEach(campoId => {
+            const campo = document.getElementById(campoId);
+            if (campo) {
+                campo.addEventListener('input', function() {
+                    if (this.value < 0) this.value = 0;
+                    if (campoId === 'data_conclusao' && this.value > 2100) this.value = 2100;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

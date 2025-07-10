@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão Escolar - Login</title>
+    
+    <!-- Font Awesome para os ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/Login_Do_Sistema.css">
+    <link rel="shortcut icon" href="assets/logo/insgtrew.png" type="image/x-icon">
+    
+    
+</head>
+<body>
+    <!-- Container do slideshow de imagens de fundo -->
+    <div class="slideshow-container">
+        <!-- Slide 1: Biblioteca escolar -->
+        <div class="slide active" style="background-image: url('assets/img/3643193c7438017c3d7c7c33c8a37e04.jpg');"></div>
+        
+        <!-- Slide 2: Sala de aula moderna -->
+        <div class="slide" style="background-image: url('assets/img/esc.jpg');"></div>
+        
+        <!-- Slide 3: Estudantes estudando -->
+        <div class="slide" style="background-image: url('assets/img/Chokai\ JHS\ 2B\ classroom.jpg');"></div>
+        
+        <!-- Slide 4: Laboratório de ciências -->
+        <div class="slide" style="background-image: url('assets/img/chalkboard.jpg');"></div>
+        
+        <!-- Slide 5: Pátio escolar -->
+        <div class="slide" style="background-image: url('assets/img/Hyperion\ Lyceum\ _\ Burton\ Hamfelt\ Architectuur.jpg');"></div>
+        
+        <!-- Slide 6: Graduação -->
+        <div class="slide" style="background-image: url('assets/img/#schoolvibes\ #school.jpg');"></div>
+    </div>
+    
+    <!-- Overlay escuro para melhor contraste -->
+    <div class="overlay"></div>
+    
+    <!-- Container principal do login -->
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo circular com imagem PNG -->
+            <div class="logo">
+                <!-- Substitua 'sua-logo.png' pelo caminho da sua imagem PNG -->
+                <img src="assets/logo/insgtrew.png" alt="Logo Gestão Escolar">
+                
+                <!-- Ícone SVG como fallback (remova quando adicionar a imagem PNG) -->
+                <svg viewBox="0 0 24 24" style="display: none;">
+                    <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                </svg>
+            </div>
+            
+            <!-- Título "Gestão Escolar" abaixo da logo -->
+            <h1 class="title-sigla">S G E</h1>
+            <h2 class="SIGLA">SISTEMA DE GESTÃO ESCOLAR</h2>
+            
+            <!-- Formulário de login -->
+            <form>
+                <!-- Campo de usuário/email com ícone Font Awesome amarelo -->
+                <div class="form-group">
+                    <label for="usuario">Usuário</label>
+                    <div class="input-container">
+                        <!-- Ícone do usuário Font Awesome em cor amarela -->
+                        <i class="fas fa-user icon"></i>
+                        <input type="email" id="usuario" placeholder="Pensadordofuturo@gmail.com">
+                    </div>
+                </div>
+                
+                <!-- Campo de senha com ícone Font Awesome amarelo e visualização -->
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <div class="input-container">
+                        <!-- Ícone do cadeado Font Awesome em cor amarela -->
+                        <i class="fas fa-lock icon"></i>
+                        <input type="password" id="senha" placeholder="*********">
+                        <!-- Ícone Font Awesome para mostrar/ocultar senha em cor amarela -->
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                    </div>
+                </div>
+                
+              
+                
+                <!-- Botão de login -->
+                <button type="submit" class="login-button">Entrar no Sistema</button>
+
+                   <!-- Link "Esqueceu sua senha?" -->
+                <div class="forgot-password">
+                     <p>Pensador do Futuro :</p>
+                    <p>Qualidade, Educar, Cultura e Crescer.</p>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+
+    <script src="js/Login_do_Sistema.js"></script>
+</body>
+</html>

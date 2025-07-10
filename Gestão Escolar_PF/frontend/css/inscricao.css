@@ -1,0 +1,672 @@
+  /* Definição das variáveis CSS para cores do tema */
+        :root {
+            --amarelo-primario: #ffd700;
+            --amarelo-escuro: #f4c210;
+            --amarelo-secundario: #ffe208;
+            --fundo-formulario: #2a2a2a;
+            --branco: #ffffff;
+            --cinza: #8e8e93;
+            --cinza-claro: #f2f2f7;
+            --vidro: rgba(255, 255, 255, 0.1);
+            --borda-vidro: rgba(255, 255, 255, 0.2);
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --sidebar-bg: var(--fundo-formulario);
+            --card-bg: var(--branco);
+            --border-color: #e0e0e0;
+        }
+
+        /* Variáveis para modo escuro */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: var(--fundo-formulario);
+            --text-primary: var(--branco);
+            --text-secondary: var(--cinza);
+            --sidebar-bg: #1e1e1e;
+            --card-bg: var(--fundo-formulario);
+            --border-color: #444444;
+        }
+
+        /* Reset básico para remover margens e paddings padrão */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilo do corpo da página */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Container principal da aplicação */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Overlay para dispositivos móveis */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Barra lateral de navegação (sidebar) */
+        .sidebar {
+            width: 72px; /* Largura inicial como no YouTube */
+            background: var(--sidebar-bg);
+            height: 100vh;
+            overflow-y: auto;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        /* Sidebar expandida ao clicar */
+        .sidebar.ativo {
+            width: 280px; /* Largura expandida */
+        }
+
+        /* Cabeçalho da sidebar */
+        .sidebar-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+        }
+
+        /* Estilo da imagem do logo 
+        .logo-imagem {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--amarelo-primario), var(--amarelo-escuro));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }*/
+
+        /* Conteúdo de texto da sidebar (escondido inicialmente) */
+        .text-content {
+            display: none; /* Escondido por padrão */
+            width: 100%;
+        }
+
+        .sidebar.ativo .text-content {
+            display: block; /* Mostra o texto quando expandido */
+        }
+
+        .text-content .title {
+            color: var(--amarelo-primario);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .text-content .subtitle {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* Menu de navegação */
+        .nav-menu {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        /* Estilo dos links de navegação */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            white-space: nowrap; /* Impede que o texto quebre */
+        }
+
+        .sidebar.ativo .nav-link {
+            padding: 12px 20px; /* Ajuste de padding quando expandido */
+        }
+
+        .nav-link:hover {
+            background: var(--vidro);
+            color: var(--amarelo-primario);
+        }
+
+        .nav-link.active {
+            background: var(--vidro);
+            color: var(--amarelo-primario);
+            border-left-color: var(--amarelo-primario);
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 15px; /* Espaço para o texto quando expandido */
+        }
+
+        .sidebar .nav-link .nav-text {
+            display: none; /* Esconde o texto inicialmente */
+        }
+
+        .sidebar.ativo .nav-link .nav-text {
+            display: inline; /* Mostra o texto quando expandido */
+        }
+
+        /* Área principal de conteúdo */
+        .main-content {
+            flex: 1;
+            margin-left: 72px; /* Margem inicial para acomodar o sidebar */
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Ajuste da margem quando sidebar está expandido */
+        .sidebar.ativo ~ .main-content {
+            margin-left: 280px;
+        }
+
+        /* Cabeçalho superior */
+        .header {
+            background: var(--bg-secondary);
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Botão de toggle do menu */
+        .menu-toggle {
+            display: block;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Botão de alternância de tema */
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--vidro);
+        }
+
+        /* Perfil do usuário */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--amarelo-primario);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Área de conteúdo do formulário */
+        .conteudo-principal {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Formulário de inscrição */
+        .formulario-inscricao {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .titulo-formulario {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--amarelo-primario);
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Seções do formulário */
+        .secao-formulario {
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .titulo-secao {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--amarelo-primario);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--amarelo-primario);
+        }
+
+        /* Grid para campos do formulário */
+        .grid-campos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .campo-formulario {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label-campo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .input-campo {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-campo:focus {
+            outline: none;
+            border-color: var(--amarelo-primario);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        /* Botões funcionais */
+        .botoes-funcionais {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .botao-funcional {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .botao-limpar {
+            background: var(--cinza);
+            color: var(--branco);
+        }
+
+        .botao-limpar:hover {
+            background: #7a7a7a;
+        }
+
+        .botao-cancelar {
+            background: #dc3545;
+            color: var(--branco);
+        }
+
+        .botao-cancelar:hover {
+            background: #c82333;
+        }
+
+        .botao-salvar {
+            background: var(--amarelo-primario);
+            color: #333;
+        }
+
+        .botao-salvar:hover {
+            background: var(--amarelo-escuro);
+        }
+
+        /* Modal da folha de inscrição */
+        .modal-folha {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .conteudo-modal {
+            background: var(--branco);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .cabecalho-modal {
+            padding: 20px;
+            background: var(--amarelo-primario);
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .botao-fechar-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .corpo-modal {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* Folha de inscrição */
+        .folha-inscricao {
+            background: white;
+            color: #333;
+            padding: 30px;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+        }
+
+        .cabecalho-folha {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--amarelo-primario);
+            padding-bottom: 20px;
+        }
+
+        .logo-folha {
+            width: 80px;
+            height: 80px;
+            background: var(--amarelo-primario);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .titulo-folha {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitulo-folha {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .dados-folha {
+            margin-bottom: 25px;
+        }
+
+        .secao-dados {
+            margin-bottom: 20px;
+            border: 2px solid #333;
+            padding: 15px;
+        }
+
+        .titulo-secao-folha {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--amarelo-escuro);
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .linha-dados {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 5px;
+        }
+
+        .campo-dados {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .label-dados {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .valor-dados {
+            border-bottom: 1px solid #333;
+            min-width: 200px;
+            display: inline-block;
+        }
+
+        /* Seção de pagamento */
+        .secao-pagamento {
+            background: #f9f9f9;
+            border: 2px solid var(--amarelo-primario);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .info-pagamento {
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Seção de assinaturas */
+        .secao-assinaturas {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #333;
+        }
+
+        .assinatura {
+            text-align: center;
+            width: 45%;
+        }
+
+        .linha-assinatura {
+            border-top: 2px solid #333;
+            margin-top: 50px;
+            padding-top: 10px;
+        }
+
+        /* Botões da folha */
+        .botoes-folha {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .botao-folha {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .botao-imprimir {
+            background: #28a745;
+            color: white;
+        }
+
+        .botao-imprimir:hover {
+            background: #218838;
+        }
+
+        .botao-pdf {
+            background: #dc3545;
+            color: white;
+        }
+
+        .botao-pdf:hover {
+            background: #c82333;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 72px; /* Mantém largura inicial em mobile */
+                left: -280px; /* Escondido em mobile inicialmente */
+            }
+
+            .sidebar.ativo {
+                left: 0;
+                width: 280px; /* Expande em mobile */
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .main-content.ativo {
+                margin-left: 280px;
+            }
+
+            .overlay.ativo {
+                display: block;
+            }
+
+            .grid-campos {
+                grid-template-columns: 1fr;
+            }
+
+            .botoes-funcionais {
+                flex-direction: column;
+            }
+
+            .secao-assinaturas {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .assinatura {
+                width: 100%;
+            }
+        }
+
+        /* Estilos para impressão */
+        @media print {
+            .cabecalho-modal,
+            .botoes-folha {
+                display: none !important;
+            }
+
+            .folha-inscricao {
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+            }
+
+            .sidebar,
+            .header,
+            .menu-toggle,
+            .overlay {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }

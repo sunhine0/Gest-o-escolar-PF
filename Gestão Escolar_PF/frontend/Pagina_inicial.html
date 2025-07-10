@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão Escolar - Pensador do Futuro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="assets/logo/insgtrew.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/Pagina_Inicial.css">
+   
+</head>
+<body>
+    <!-- Container principal da aplicação -->
+    <div class="app-container">
+        <!-- Overlay para dispositivos móveis -->
+        <div class="overlay" id="overlay"></div>
+        
+        <!-- Barra lateral de navegação -->
+        <aside class="sidebar" id="sidebar">
+            <!-- Cabeçalho da sidebar com logo e informações -->
+            <!-- Header da sidebar com logo -->
+                <div class="sidebar-header">
+                    <a href="Pagina_inicial.html"><img src="assets/logo/insgtrew.png" alt="Logo da Instituição" class="logo-imagem"></a>
+                    <div class="text-content">
+                        <div class="title">Pensador do Futuro</div>
+                        <div class="subtitle">Sistema de Gestão Escolar</div>
+                    </div>
+                </div>
+            
+            <!-- Menu de navegação principal -->
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-page="Painel de Control">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="nav-text">Painel de Control</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#pessoas" class="nav-link" data-page="pessoas">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">Pessoas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#cadastros" class="nav-link" data-page="cadastros">
+                            <i class="fas fa-user-plus"></i>
+                            <span class="nav-text">Cadastros</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#turmas" class="nav-link" data-page="turmas">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span class="nav-text">Turmas / Disciplinas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#financeiro" class="nav-link" data-page="financeiro">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="nav-text">Financeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="rel-financeiro">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span class="nav-text">Rei Financeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-page="gerar-contratos">
+                            <i class="fas fa-file-contract"></i>
+                            <span class="nav-text">Gerar Contratos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#sms" class="nav-link" data-page="sms">
+                            <i class="fas fa-sms"></i>
+                            <span class="nav-text">SMS</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#agenda" class="nav-link" data-page="agenda">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="nav-text">Tarefas / Agenda</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#anotacoes" class="nav-link" data-page="anotacoes">
+                            <i class="fas fa-sticky-note"></i>
+                            <span class="nav-text">Anotações</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#whatsapp" class="nav-link" data-page="whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span class="nav-text">Conectar WhatsApp</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#mensalidades" class="nav-link" data-page="mensalidades">
+                            <i class="fas fa-credit-card"></i>
+                            <span class="nav-text">Mensalidades Sistema</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Área principal de conteúdo -->
+        <main class="main-content">
+            <!-- Cabeçalho superior -->
+            <header class="header">
+                <div class="header-left">
+                    <!-- Botão menu hambúrguer com dropdown -->
+                    <div style="position: relative;">
+                        <button class="menu-toggle" id="menuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <!-- Dropdown do menu -->
+                        <div class="menu-dropdown" id="menuDropdown">
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user-cog"></i>
+                                <span>Configurações</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Relatórios</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-user-plus""></i>
+                                <span>Matricular alunos</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-download"></i>
+                                <span>Exportar Dados</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-bell"></i>
+                                <span>Notificações</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Ajuda</span>
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sair</span>
+                            </a>
+                        </div>
+                    </div>
+                    <h1 class="page-title">Painel de Control</h1>
+                </div>
+                
+                <div class="header-right">
+                    <!-- Botão de alternância de tema -->
+                    <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- Perfil do usuário -->
+                    <div class="user-profile">
+                        <div class="user-avatar">SGE</div>
+                        <span>SGE</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Conteúdo principal -->
+            <div class="content">
+                <!-- Aviso importante -->
+                <div class="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Aviso:</strong> Prezado Cliente, não identificamos o pagamento da sua última mensalidade, entre em contato conosco o mais rápido possível para regularizar a situação, pois caso seu acesso ao sistema será desativado. <strong>Clique Aqui</strong> para ver seus débitos.
+                    </div>
+                </div>
+                
+                <!-- Grid de estatísticas -->
+                <div class="stats-grid">
+                    <!-- Card Alunos Cadastrados -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Alunos Cadastrados</div>
+                            <div class="stat-icon students">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">7</div>
+                        <div class="stat-subtitle">Este Mês • +2</div>
+                    </div>
+                    
+                    <!-- Card Despesas Vencidas -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Despesas Vencidas</div>
+                            <div class="stat-icon expenses">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">539.000,00 Kz</div>
+                        <div class="stat-subtitle">Pagar Vencidas • 4</div>
+                    </div>
+                    
+                    <!-- Card Receber Vencidas -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Receber Vencidas</div>
+                            <div class="stat-icon revenue">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">610.000,00 Kz</div>
+                        <div class="stat-subtitle">Receb. Vencidas • 6</div>
+                    </div>
+                    
+                    <!-- Card Saldo no Mês -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Saldo no Mês</div>
+                            <div class="stat-icon balance">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">0,00 Kz</div>
+                        <div class="stat-subtitle">Saldo Hoje • +0</div>
+                    </div>
+                    
+                    <!-- Card Aniversariantes Hoje -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Aniversariantes Hoje</div>
+                            <div class="stat-icon defaulters">
+                                <i class="fas fa-birthday-cake"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-subtitle">Este Mês • +0</div>
+                    </div>
+                    
+                    <!-- Card Turmas 2025 -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Turmas 2025</div>
+                            <div class="stat-icon enrollments">
+                                <i class="fas fa-chalkboard"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">6</div>
+                        <div class="stat-subtitle">Em Andamento • 1</div>
+                    </div>
+                    
+                    <!-- Card Matrículas Mês -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Matrículas Mês</div>
+                            <div class="stat-icon classes">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-subtitle">Matrículas Hoje • 0</div>
+                    </div>
+                    
+                    <!-- Card Alunos Inadimplentes -->
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Alunos Inadimplentes</div>
+                            <div class="stat-icon expenses">
+                                <i class="fas fa-user-times"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">7</div>
+                        <div class="stat-subtitle">Total de inadimplentes</div>
+                    </div>
+                </div>
+                
+                <!-- Seção de vídeo promocional -->
+                <div class="video-section">
+                    <div class="video-content">
+                        <div class="video-logo">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="video-text">
+                            <h3 class="video-title">Todos os Dados Cadastrais</h3>
+                            <p class="video-description">
+                                Todas as informações mostradas no vídeo e usadas no sistema são fictícias, apenas para preenchimento de cadastros!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/Pagina_Inicial.js"> </script>
+</body>
+</html>

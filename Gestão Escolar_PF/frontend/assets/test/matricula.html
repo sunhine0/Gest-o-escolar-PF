@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Matrículas - Pensador do Futuro</title>
+    <!-- Importação dos ícones Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ============================================================ */
+        /* DEFINIÇÃO DAS VARIÁVEIS CSS PARA CORES E TEMAS */
+        /* ============================================================ */
+        
+        :root {
+            /* Cores principais do sistema */
+            --amarelo-primario: #ffd700;
+            --amarelo-escuro: #f4c210;
+            --amarelo-secundario: #ffe208;
+            --fundo-formulario: #2a2a2a;
+            --branco: #ffffff;
+            --cinza: #8e8e93;
+            --cinza-claro: #f2f2f7;
+            --vidro: rgba(255, 255, 255, 0.1);
+            --borda-vidro: rgba(255, 255, 255, 0.2);
+            
+            /* Variáveis para modo claro */
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --sidebar-bg: var(--fundo-formulario);
+            --card-bg: var(--branco);
+            --border-color: #e0e0e0;
+        }
+        
+        /* Variáveis para modo escuro */
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: var(--fundo-formulario);
+            --text-primary: var(--branco);
+            --text-secondary: var(--cinza);
+            --sidebar-bg: #1e1e1e;
+            --card-bg: var(--fundo-formulario);
+            --border-color: #444444;
+        }
+        
+        /* ============================================================ */
+        /* RESET E CONFIGURAÇÕES GLOBAIS */
+        /* ============================================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+        
+        /* ============================================================ */
+        /* CONTAINER PRINCIPAL DA APLICAÇÃO */
+        /* ============================================================ */
+        
+        .container-aplicacao {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* ============================================================ */
+        /* OVERLAY PARA DISPOSITIVOS MÓVEIS */
+        /* ============================================================ */
+        
+        .sobreposicao {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+        
+        .sobreposicao.ativo {
+            display: block;
+        }
+        
+        /* ============================================================ */
+        /* BARRA LATERAL DE NAVEGAÇÃO */
+        /* ============================================================ */
+        
+        .barra-lateral {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: var(--branco);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 999;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* ============================================================ */
+        /* CABEÇALHO DA BARRA LATERAL */
+        /* ============================================================ */
+        
+        .cabecalho-sidebar {
+            padding: 20px;
+            border-bottom: 1px solid var(--borda-vidro);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .imagem-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .conteudo-texto .titulo {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--amarelo-primario);
+            margin-bottom: 4px;
+        }
+        
+        .conteudo-texto .subtitulo {
+            font-size: 12px;
+            color: var(--cinza);
+        }
+        
+        /* ============================================================ */
+        /* MENU DE NAVEGAÇÃO */
+        /* ============================================================ */
+        
+        .menu-navegacao {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .item-navegacao {
+            margin: 0;
+        }
+        
+        .link-navegacao {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--cinza);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .link-navegacao:hover {
+            background-color: var(--vidro);
+            color: var(--branco);
+            border-left-color: var(--amarelo-primario);
+        }
+        
+        .link-navegacao.ativo {
+            background-color: var(--amarelo-primario);
+            color: var(--fundo-formulario);
+            border-left-color: var(--amarelo-escuro);
+            font-weight: bold;
+        }
+        
+        .link-navegacao i {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+        
+        /* ============================================================ */
+        /* ÁREA PRINCIPAL DE CONTEÚDO */
+        /* ============================================================ */
+        
+        .conteudo-principal {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+            background-color: var(--bg-primary);
+            transition: margin-left 0.3s ease;
+        }
+        
+        /* ============================================================ */
+        /* CABEÇALHO SUPERIOR */
+        /* ============================================================ */
+        
+        .cabecalho {
+            background-color: var(--bg-secondary);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .cabecalho-esquerda {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+        
+        .botao-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .botao-menu:hover {
+            background-color: var(--amarelo-primario);
+            color: var(--fundo-formulario);
+        }
+        
+        .titulo-pagina {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin: 0;
+        }
+        
+        .cabecalho-direita {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .alternador-tema {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .alternador-tema:hover {
+            background-color: var(--amarelo-primario);
+            color: var(--fundo-formulario);
+            transform: rotate(15deg);
+        }
+        
+        .perfil-usuario {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+        }
+        
+        .avatar-usuario {
+            width: 40px;
+            height: 40px;
+            background-color: var(--amarelo-primario);
+            color: var(--fundo-formulario);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        /* ============================================================ */
+        /* DROPDOWN DO MENU */
+        /* ============================================================ */
+        
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+        }
+        
+        .dropdown-menu.ativo {
+            display: block;
+        }
+        
+        .item-dropdown {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .item-dropdown:last-child {
+            border-bottom: none;
+        }
+        
+        .item-dropdown:hover {
+            background-color: var(--amarelo-primario);
+            color: var(--fundo-formulario);
+        }
+        
+        .item-dropdown i {
+            width: 20px;
+            margin-right: 10px;
+        }
+        
+        /* ============================================================ */
+        /* ÁREA DE CONTEÚDO DA MATRÍCULA */
+        /* ============================================================ */
+        
+        .area-conteudo {
+            padding: 30px;
+        }
+        
+        .container-matricula {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .cartao-matricula {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .cabecalho-cartao {
+            background: linear-gradient(135deg, var(--amarelo-primario), var(--amarelo-escuro));
+            color: var(--fundo-formulario);
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .cabecalho-cartao h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .cabecalho-cartao i {
+            font-size: 24px;
+        }
+        
+        .corpo-cartao {
+            padding: 30px;
+        }
+        
+        /* ============================================================ */
+        /* FORMULÁRIO DE MATRÍCULA */
+        /* ============================================================ */
+        
+        .formulario-matricula {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .grupo-campo {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .grupo-campo.campo-completo {
+            grid-column: 1 / -1;
+        }
+        
+        .rotulo-campo {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rotulo-campo.obrigatorio::after {
+            content: "*";
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .campo-entrada {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .campo-entrada:focus {
+            outline: none;
+            border-color: var(--amarelo-primario);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+        
+        .campo-entrada::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .campo-selecao {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .campo-selecao:focus {
+            outline: none;
+            border-color: var(--amarelo-primario);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+        
+        .area-texto {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        /* ============================================================ */
+        /* SEÇÕES DO FORMULÁRIO */
+        /* ============================================================ */
+        
+        .secao-formulario {
+            margin-bottom: 40px;
+        }
+        
+        .titulo-secao {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--amarelo-primario);
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .titulo-secao i {
+            color: var(--amarelo-primario);
+            font-size: 20px;
+        }
+        
+        /* ============================================================ */
+        /* BOTÕES DE AÇÃO */
+        /* ============================================================ */
+        
+        .container-botoes {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+        }
+        
+        .botao {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .botao-primario {
+            background-color: var(--amarelo-primario);
+            color: var(--fundo-formulario);
+        }
+        
+        .botao-primario:hover {
+            background-color: var(--amarelo-escuro);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .botao-secundario {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+        
+        .botao-secundario:hover {
+            background-color: var(--border-color);
+            transform: translateY(-2px);
+        }
+        
+        .botao-perigo {
+            background-color: #e74c3c;
+            color: var(--branco);
+        }
+        
+        .botao-perigo:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        /* ============================================================ */
+        /* RESPONSIVIDADE PARA TABLETS */
+        /* ============================================================ */
+        
+        @media (max-width: 1024px) {
+            .barra-lateral {
+                transform: translateX(-100%);
+            }
+            
+            .barra-lateral.ativa {
+                transform: translateX(0);
+            }
+            
+            .conteudo-principal {
+                margin-left: 0;
+            }
+            
+            .botao-menu {
+                display: block;
+            }
+            
+            .formulario-matricula {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ============================================================ */
+        /* RESPONSIVIDADE PARA DISPOSITIVOS MÓVEIS */
+        /* ============================================================ */
+        
+        @media (max-width: 768px) {
+            .cabecalho {
+                padding: 15px 20px;
+            }
+            
+            .titulo-pagina {
+                font-size: 20px;
+            }
+            
+            .area-conteudo {
+                padding: 20px 15px;
+            }
+            
+            .corpo-cartao {
+                padding: 20px;
+            }
+            
+            .container-botoes {
+                flex-direction: column;
+            }
+            
+            .botao {
+                justify-content: center;
+            }
+            
+            .cabecalho-direita {
+                gap: 10px;
+            }
+            
+            .perfil-usuario span {
+                display: none;
+            }
+        }
+        
+        /* ============================================================ */
+        /* RESPONSIVIDADE PARA TELAS PEQUENAS */
+        /* ============================================================ */
+        
+        @media (max-width: 480px) {
+            .barra-lateral {
+                width: 100%;
+            }
+            
+            .cabecalho-cartao {
+                padding: 15px 20px;
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .titulo-secao {
+                font-size: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+        
+        /* ============================================================ */
+        /* ANIMAÇÕES E TRANSIÇÕES */
+        /* ============================================================ */
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .cartao-matricula {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* ============================================================ */
+        /* ESTADOS DE CARREGAMENTO */
+        /* ============================================================ */
+        
+        .carregando {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .carregando::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid var(--amarelo-primario);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container principal da aplicação -->
+    <div class="container-aplicacao">
+        <!-- Overlay para dispositivos móveis -->
+        <div class="sobreposicao" id="sobreposicao"></div>
+        
+        <!-- Barra lateral de navegação -->
+        <aside class="barra-lateral" id="barraLateral">
+            <!-- Cabeçalho da sidebar com logo e informações -->
+            <div class="cabecalho-sidebar">
+                <img src="assets/logo/insgtrew.png" alt="Logo da Instituição" class="imagem-logo">
+                <div class="conteudo-texto">
+                    <div class="titulo">Pensador do Futuro</div>
+                    <div class="subtitulo">Sistema de Gestão Escolar</div>
+                </div>
+            </div>
+            
+            <!-- Menu de navegação principal -->
+            <nav>
+                <ul class="menu-navegacao">
+                    <li class="item-navegacao">
+                        <a href="#" class="link-navegacao" data-pagina="painel-controle">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span class="texto-navegacao">Painel de Control</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#pessoas" class="link-navegacao" data-pagina="pessoas">
+                            <i class="fas fa-users"></i>
+                            <span class="texto-navegacao">Pessoas</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#cadastros" class="link-navegacao ativo" data-pagina="cadastros">
+                            <i class="fas fa-user-plus"></i>
+                            <span class="texto-navegacao">Cadastros</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#turmas" class="link-navegacao" data-pagina="turmas">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span class="texto-navegacao">Turmas / Disciplinas</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#financeiro" class="link-navegacao" data-pagina="financeiro">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="texto-navegacao">Financeiro</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#" class="link-navegacao" data-pagina="rel-financeiro">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span class="texto-navegacao">Rei Financeiro</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#" class="link-navegacao" data-pagina="gerar-contratos">
+                            <i class="fas fa-file-contract"></i>
+                            <span class="texto-navegacao">Gerar Contratos</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#sms" class="link-navegacao" data-pagina="sms">
+                            <i class="fas fa-sms"></i>
+                            <span class="texto-navegacao">SMS</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#agenda" class="link-navegacao" data-pagina="agenda">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="texto-navegacao">Tarefas / Agenda</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#anotacoes" class="link-navegacao" data-pagina="anotacoes">
+                            <i class="fas fa-sticky-note"></i>
+                            <span class="texto-navegacao">Anotações</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#whatsapp" class="link-navegacao" data-pagina="whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span class="texto-navegacao">Conectar WhatsApp</span>
+                        </a>
+                    </li>
+                    <li class="item-navegacao">
+                        <a href="#mensalidades" class="link-navegacao" data-pagina="mensalidades">
+                            <i class="fas fa-credit-card"></i>
+                            <span class="texto-navegacao">Mensalidades Sistema</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Área principal de conteúdo -->
+        <main class="conteudo-principal">
+            <!-- Cabeçalho superior -->
+            <header class="cabecalho">
+                <div class="cabecalho-esquerda">
+                    <!-- Botão menu hambúrguer com dropdown -->
+                    <div style="position: relative;">
+                        <button class="botao-menu" id="botaoMenu">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <!-- Dropdown do menu -->
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="#" class="item-dropdown">
+                                <i class="fas fa-user-cog"></i>
+                                <span>Configurações</span>
+                            </a>
+                            <a href="#" class="item-dropdown">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Relatórios</span>
+                            </a>
+                            <a href="#" class="item-dropdown">
+                                <i class="fas fa-user-plus"></i>
+                                <span>Matricular alunos</span>
+                            </a>
+                            <a href="#" class="item-dropdown">
+                                <i class="fas fa-download"></i>
+                                <span>Exportar Dados</span>
+                            </a>
+                            <a href="#" class="item-dropdown">
+                                <i class="fas fa-bell"></i>
+                                <span>Notificações</span>
+                            </a>
+                            <a href="#" class="item-dropdown">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Ajuda</span>
+                            </a>
+                            <a href="#" class="item-dropdown">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Sair</span>
+                            </a>
+                        </div>
+                    </div>
+                    <h1 class="titulo-pagina">Sistema de Matrículas</h1>
+                </div>
+                
+                <div class="cabecalho-direita">
+                    <!-- Botão de alternância de tema -->
+                    <button class="alternador-tema" id="alternadorTema" title="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    
+                    <!-- Perfil do usuário -->
+                    <div class="perfil-usuario">
+                        <div class="avatar-usuario">SGE</div>
+                        <span>SGE</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Área de conteúdo da matrícula -->
+            <div class="area-conteudo">
+                <div class="container-matricula">
+                    <!-- Cartão principal de matrícula -->
+                    <div class="cartao-matricula">
+                        <div class="cabecalho-cartao">
+                            <i class="fas fa-user-graduate"></i>
+                            <h2>Nova Matrícula de Aluno</h2>
+                        </div>
+                        
+                        <div class="corpo-cartao">
+                            <form id="formularioMatricula" class="formulario-matricula">
+                                <!-- Seção: Dados Pessoais -->
+                                <div class="secao-formulario campo-completo">
+                                    <h3 class="titulo-secao">
+                                        <i class="fas fa-user"></i>
+                                        Dados Pessoais
+                                    </h3>
+                                    
+                                 
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="nomeCompleto">
+                                                <i class="fas fa-signature"></i>
+                                                Nome Completo
+                                            </label>
+                                            <input type="text" id="nomeCompleto" name="nomeCompleto" class="campo-entrada" placeholder="Digite o nome completo do aluno" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="genero">
+                                                <i class="fas fa-venus-mars"></i>
+                                                Gênero
+                                            </label>
+                                            <select id="genero" name="genero" class="campo-selecao" required>
+                                                <option value="">Selecione o gênero</option>
+                                                <option value="masculino">Masculino</option>
+                                                <option value="feminino">Feminino</option>
+                                                <option value="outro">Outro</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="estadoCivil">
+                                                <i class="fas fa-heart"></i>
+                                                Estado Civil
+                                            </label>
+                                            <select id="estadoCivil" name="estadoCivil" class="campo-selecao" required>
+                                                <option value="">Selecione o estado civil</option>
+                                                <option value="solteiro">Solteiro(a)</option>
+                                                <option value="casado">Casado(a)</option>
+                                                <option value="divorciado">Divorciado(a)</option>
+                                                <option value="viuvo">Viúvo(a)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="naturalidade">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                Naturalidade
+                                            </label>
+                                            <input type="text" id="naturalidade" name="naturalidade" class="campo-entrada" placeholder="Cidade de nascimento" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="nacionalidade">
+                                                <i class="fas fa-flag"></i>
+                                                Nacionalidade
+                                            </label>
+                                            <input type="text" id="nacionalidade" name="nacionalidade" class="campo-entrada" placeholder="Nacionalidade" value="Angolana" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="provincia">
+                                                <i class="fas fa-map"></i>
+                                                Província
+                                            </label>
+                                            <select id="provincia" name="provincia" class="campo-selecao" required>
+                                                <option value="">Selecione a província</option>
+                                                <option value="luanda">Luanda</option>
+                                                <option value="benguela">Benguela</option>
+                                                <option value="huambo">Huambo</option>
+                                                <option value="lobito">Lobito</option>
+                                                <option value="cabinda">Cabinda</option>
+                                                <option value="malanje">Malanje</option>
+                                                <option value="huila">Huíla</option>
+                                                <option value="lunda-norte">Lunda Norte</option>
+                                                <option value="lunda-sul">Lunda Sul</option>
+                                                <option value="moxico">Moxico</option>
+                                                <option value="namibe">Namibe</option>
+                                                <option value="uige">Uíge</option>
+                                                <option value="zaire">Zaire</option>
+                                                <option value="cuanza-norte">Cuanza Norte</option>
+                                                <option value="cuanza-sul">Cuanza Sul</option>
+                                                <option value="cunene">Cunene</option>
+                                                <option value="cuando-cubango">Cuando Cubango</option>
+                                                <option value="bie">Bié</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="municipio">
+                                                <i class="fas fa-city"></i>
+                                                Município
+                                            </label>
+                                            <input type="text" id="municipio" name="municipio" class="campo-entrada" placeholder="Digite o município" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="bairro">
+                                                <i class="fas fa-home"></i>
+                                                Bairro
+                                            </label>
+                                            <input type="text" id="bairro" name="bairro" class="campo-entrada" placeholder="Digite o bairro">
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="bilheteIdentidade">
+                                                <i class="fas fa-id-card"></i>
+                                                Bilhete de Identidade
+                                            </label>
+                                            <input type="text" id="bilheteIdentidade" name="bilheteIdentidade" class="campo-entrada" placeholder="Número do BI" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="dataEmissao">
+                                                <i class="fas fa-calendar"></i>
+                                                Data de Emissão
+                                            </label>
+                                            <input type="date" id="dataEmissao" name="dataEmissao" class="campo-entrada" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="validadeBi">
+                                                <i class="fas fa-calendar-check"></i>
+                                                Validade
+                                            </label>
+                                            <input type="date" id="validadeBi" name="validadeBi" class="campo-entrada">
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="dataNascimento">
+                                                <i class="fas fa-birthday-cake"></i>
+                                                Data de Nascimento
+                                            </label>
+                                            <input type="date" id="dataNascimento" name="dataNascimento" class="campo-entrada" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="terceiraFeira">
+                                                <i class="fas fa-calendar-day"></i>
+                                                Terça Feira
+                                            </label>
+                                            <input type="date" id="terceiraFeira" name="terceiraFeira" class="campo-entrada">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Seção: Informações de Contato -->
+                                <div class="secao-formulario campo-completo">
+                                    <h3 class="titulo-secao">
+                                        <i class="fas fa-address-book"></i>
+                                        Informações de Contato
+                                    </h3>
+                                    
+                                    <div class="formulario-matricula">
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="enderecoCompleto">
+                                                <i class="fas fa-map-marked-alt"></i>
+                                                Endereço Completo
+                                            </label>
+                                            <textarea id="enderecoCompleto" name="enderecoCompleto" class="campo-entrada area-texto" placeholder="Digite o endereço completo"></textarea>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="telefoneAlternativo">
+                                                <i class="fas fa-phone-alt"></i>
+                                                Telefone Alternativo
+                                            </label>
+                                            <input type="tel" id="telefoneAlternativo" name="telefoneAlternativo" class="campo-entrada" placeholder="+244 XXX XXX XXX">
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="enderecoTelefone">
+                                                <i class="fas fa-phone"></i>
+                                                Telefone Principal
+                                            </label>
+                                            <input type="tel" id="enderecoTelefone" name="enderecoTelefone" class="campo-entrada" placeholder="+244 XXX XXX XXX">
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="telefoneAlternativo2">
+                                                <i class="fas fa-mobile-alt"></i>
+                                                Telefone Alternativo 2
+                                            </label>
+                                            <input type="tel" id="telefoneAlternativo2" name="telefoneAlternativo2" class="campo-entrada" placeholder="+244 XXX XXX XXX">
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="emailEletronico">
+                                                <i class="fas fa-envelope"></i>
+                                                Endereço Eletrônico (Email)
+                                            </label>
+                                            <input type="email" id="emailEletronico" name="emailEletronico" class="campo-entrada" placeholder="exemplo@email.com">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Seção: Informações Acadêmicas -->
+                                <div class="secao-formulario campo-completo">
+                                    <h3 class="titulo-secao">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        Informações Acadêmicas
+                                    </h3>
+                                    
+                                    <div class="formulario-matricula">
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="cursoMatricula">
+                                                <i class="fas fa-book"></i>
+                                                Curso
+                                            </label>
+                                            <select id="cursoMatricula" name="cursoMatricula" class="campo-selecao" required>
+                                                <option value="">Selecione o curso</option>
+                                                <option value="informatica">Informática</option>
+                                                <option value="contabilidade">Contabilidade</option>
+                                                <option value="gestao">Gestão de Empresas</option>
+                                                <option value="secretariado">Secretariado</option>
+                                                <option value="enfermagem">Enfermagem</option>
+                                                <option value="pedagogia">Pedagogia</option>
+                                                <option value="direito">Direito</option>
+                                                <option value="engenharia">Engenharia</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="classeEscolar">
+                                                <i class="fas fa-layer-group"></i>
+                                                Classe
+                                            </label>
+                                            <select id="classeEscolar" name="classeEscolar" class="campo-selecao" required>
+                                                <option value="">Selecione a classe</option>
+                                                <option value="10">10ª Classe</option>
+                                                <option value="11">11ª Classe</option>
+                                                <option value="12">12ª Classe</option>
+                                                <option value="13">13ª Classe</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="turmaEscolar">
+                                                <i class="fas fa-users-class"></i>
+                                                Turma
+                                            </label>
+                                            <select id="turmaEscolar" name="turmaEscolar" class="campo-selecao" required>
+                                                <option value="">Selecione a turma</option>
+                                                <option value="A">Turma A</option>
+                                                <option value="B">Turma B</option>
+                                                <option value="C">Turma C</option>
+                                                <option value="D">Turma D</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="periodoLetivo">
+                                                <i class="fas fa-clock"></i>
+                                                Período
+                                            </label>
+                                            <select id="periodoLetivo" name="periodoLetivo" class="campo-selecao" required>
+                                                <option value="">Selecione o período</option>
+                                                <option value="manha">Manhã</option>
+                                                <option value="tarde">Tarde</option>
+                                                <option value="noite">Noite</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="anoLetivo">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                Ano Letivo
+                                            </label>
+                                            <select id="anoLetivo" name="anoLetivo" class="campo-selecao" required>
+                                                <option value="">Selecione o ano letivo</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2025" selected>2025</option>
+                                                <option value="2026">2026</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="escolaAnterior">
+                                                <i class="fas fa-school"></i>
+                                                Escola Anterior
+                                            </label>
+                                            <input type="text" id="escolaAnterior" name="escolaAnterior" class="campo-entrada" placeholder="Nome da escola anterior">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Seção: Informações do Responsável -->
+                                <div class="secao-formulario campo-completo">
+                                    <h3 class="titulo-secao">
+                                        <i class="fas fa-user-shield"></i>
+                                        Dados do Responsável / Encarregado
+                                    </h3>
+                                    
+                                    <div class="formulario-matricula">
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="nomeResponsavel">
+                                                <i class="fas fa-user-tie"></i>
+                                                Nome do Responsável
+                                            </label>
+                                            <input type="text" id="nomeResponsavel" name="nomeResponsavel" class="campo-entrada" placeholder="Nome completo do responsável" required>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo obrigatorio" for="parentesco">
+                                                <i class="fas fa-sitemap"></i>
+                                                Parentesco
+                                            </label>
+                                            <select id="parentesco" name="parentesco" class="campo-selecao" required>
+                                                <option value="">Selecione o parentesco</option>
+                                                <option value="pai">Pai</option>
+                                                <option value="mae">Mãe</option>
+                                                <option value="avo">Avô/Avó</option>
+                                                <option value="tio">Tio/Tia</option>
+                                                <option value="irmao">Irmão/Irmã</option>
+                                                <option value="tutor">Tutor Legal</option>
+                                               
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="grupo-campo">
+                                            <label class="rotulo-campo" for="telefoneResponsavel">
+                                                <i class="fas fa-phone"></i>
+                                                Telefone do Responsável
+                                            </label>
+                                            <input type="tel" id="telefoneResponsavel" name="telefoneResponsavel" class="campo-entrada" placeholder="+244 XXX XXX XXX">
+                                        </div>
+                                        
+                                     
+                                        
+                                        
+
+   
+
+                                <!-- Botões de ação -->
+                                <div class="container-botoes">
+                                    <button type="button" class="botao botao-secundario" id="botaoLimpar">
+                                        <i class="fas fa-eraser"></i>
+                                        Limpar Formulário
+                                    </button>
+                                    
+                                    <button type="button" class="botao botao-perigo" id="botaoCancelar">
+                                        <i class="fas fa-times"></i>
+                                        Cancelar
+                                    </button>
+                                    
+                                    <button type="submit" class="botao botao-primario" id="botaoSalvar">
+                                        <i class="fas fa-save"></i>
+                                        Salvar Matrícula
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ============================================================
+        // SCRIPT JAVASCRIPT PARA FUNCIONALIDADES INTERATIVAS
+        // ============================================================
+        
+        // Aguarda o carregamento completo da página
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // ============================================================
+            // ELEMENTOS DO DOM
+            // ============================================================
+            
+            const botaoMenu = document.getElementById('botaoMenu');
+            const barraLateral = document.getElementById('barraLateral');
+            const sobreposicao = document.getElementById('sobreposicao');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const alternadorTema = document.getElementById('alternadorTema');
+            const formularioMatricula = document.getElementById('formularioMatricula');
+            const botaoLimpar = document.getElementById('botaoLimpar');
+            const botaoCancelar = document.getElementById('botaoCancelar');
+            const botaoSalvar = document.getElementById('botaoSalvar');
+            
+            // ============================================================
+            // FUNCIONALIDADE DO MENU MOBILE
+            // ============================================================
+            
+            // Abrir/fechar menu lateral em dispositivos móveis
+            if (botaoMenu) {
+                botaoMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    barraLateral.classList.toggle('ativa');
+                    sobreposicao.classList.toggle('ativo');
+                    dropdownMenu.classList.remove('ativo');
+                });
+            }
+            
+            // Fechar menu ao clicar na sobreposição
+            sobreposicao.addEventListener('click', function() {
+                barraLateral.classList.remove('ativa');
+                sobreposicao.classList.remove('ativo');
+                dropdownMenu.classList.remove('ativo');
+            });
+            
+            // ============================================================
+            // FUNCIONALIDADE DO DROPDOWN MENU
+            // ============================================================
+            
+            // Alternar dropdown do menu
+            botaoMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('ativo');
+            });
+            
+            // Fechar dropdown ao clicar fora
+            document.addEventListener('click', function() {
+                dropdownMenu.classList.remove('ativo');
+            });
+            
+            // ============================================================
+            // FUNCIONALIDADE DO ALTERNADOR DE TEMA
+            // ============================================================
+            
+            // Verificar tema salvo no armazenamento local
+            const temaSalvo = localStorage.getItem('tema') || 'claro';
+            if (temaSalvo === 'escuro') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                alternadorTema.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Alternar entre tema claro e escuro
+            alternadorTema.addEventListener('click', function() {
+                const temaAtual = document.documentElement.getAttribute('data-theme');
+                
+                if (temaAtual === 'dark') {
+                    // Mudar para tema claro
+                    document.documentElement.removeAttribute('data-theme');
+                    alternadorTema.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('tema', 'claro');
+                } else {
+                    // Mudar para tema escuro
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    alternadorTema.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('tema', 'escuro');
+                }
+            });
+            
+            // ============================================================
+            // FUNCIONALIDADES DO FORMULÁRIO
+            // ============================================================
+            
+            // Limpar todos os campos do formulário
+            botaoLimpar.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja limpar todos os campos? Esta ação não pode ser desfeita.')) {
+                    formularioMatricula.reset();
+                    // Resetar o código para 0
+                    document.getElementById('codigoAluno').value = '0';
+                    // Focar no primeiro campo
+                    document.getElementById('nomeCompleto').focus();
+                }
+            });
+            
+            // Cancelar matrícula
+            botaoCancelar.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja cancelar? Todos os dados inseridos serão perdidos.')) {
+                    // Redirecionar para página anterior ou limpar formulário
+                    window.history.back();
+                }
+            });
+            
+            // Submissão do formulário
+            formularioMatricula.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validar campos obrigatórios
+                const camposObrigatorios = formularioMatricula.querySelectorAll('[required]');
+                let formularioValido = true;
+                
+                camposObrigatorios.forEach(function(campo) {
+                    if (!campo.value.trim()) {
+                        campo.style.borderColor = '#e74c3c';
+                        formularioValido = false;
+                    } else {
+                        campo.style.borderColor = '';
+                    }
+                });
+                
+                if (!formularioValido) {
+                    alert('Por favor, preencha todos os campos obrigatórios (marcados com *).');
+                    return;
+                }
+                
+                // Simular envio dos dados
+                botaoSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                botaoSalvar.disabled = true;
+                
+                // Simular processo de salvamento
+                setTimeout(function() {
+                    alert('Matrícula realizada com sucesso!');
+                    
+                    // Resetar botão
+                    botaoSalvar.innerHTML = '<i class="fas fa-save"></i> Salvar Matrícula';
+                    botaoSalvar.disabled = false;
+                    
+                    // Limpar formulário
+                    formularioMatricula.reset();
+                    document.getElementById('codigoAluno').value = '0';
+                    
+                    // Focar no primeiro campo
+                    document.getElementById('nomeCompleto').focus();
+                }, 2000);
+            });
+            
+            // ============================================================
+            // VALIDAÇÕES EM TEMPO REAL
+            // ============================================================
+            
+            // Validação de email
+            const campoEmail = document.getElementById('emailEletronico');
+            const campoEmailResponsavel = document.getElementById('emailResponsavel');
+            
+            function validarEmail(campo) {
+                const email = campo.value;
+                const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (email && !regexEmail.test(email)) {
+                    campo.style.borderColor = '#e74c3c';
+                } else {
+                    campo.style.borderColor = '';
+                }
+            }
+            
+            if (campoEmail) {
+                campoEmail.addEventListener('blur', function() {
+                    validarEmail(this);
+                });
+            }
+            
+            if (campoEmailResponsavel) {
+                campoEmailResponsavel.addEventListener('blur', function() {
+                    validarEmail(this);
+                });
+            }
+            
+            // Formatação de telefone
+            const camposTelefone = document.querySelectorAll('input[type="tel"]');
+            camposTelefone.forEach(function(campo) {
+                campo.addEventListener('input', function() {
+                    let valor = this.value.replace(/\D/g, '');
+                    
+                    // Formato para telefones angolanos: +244 XXX XXX XXX
+                    if (valor.length >= 9) {
+                        if (valor.startsWith('244')) {
+                            valor = valor.replace(/^244(\d{3})(\d{3})(\d{3})/, '+244 $1 $2 $3');
+                        } else {
+                            valor = valor.replace(/^(\d{3})(\d{3})(\d{3})/, '+244 $1 $2 $3');
+                        }
+                    }
+                    
+                    this.value = valor;
+                });
+            });
+            
+            // ============================================================
+            // NAVEGAÇÃO ENTRE CAMPOS
+            // ============================================================
+            
+            // Permitir navegação com Enter
+            const campos = formularioMatricula.querySelectorAll('input, select, textarea');
+            campos.forEach(function(campo, indice) {
+                campo.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && campo.tagName !== 'TEXTAREA') {
+                        e.preventDefault();
+                        
+                        // Ir para o próximo campo
+                        if (indice < campos.length - 1) {
+                            campos[indice + 1].focus();
+                        }
+                    }
+                });
+            });
+            
+            // ============================================================
+            // RESPONSIVIDADE ADICIONAL
+            // ============================================================
+            
+            // Ajustar layout em mudanças de tamanho da tela
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 1024) {
+                    barraLateral.classList.remove('ativa');
+                    sobreposicao.classList.remove('ativo');
+                    dropdownMenu.classList.remove('ativo');
+                }
+            });
+            
+            // ============================================================
+            // INICIALIZAÇÃO
+            // ============================================================
+            
+            // Focar no primeiro campo ao carregar a página
+            document.getElementById('nomeCompleto').focus();
+            
+            // Definir data atual como padrão em alguns campos
+            const hoje = new Date().toISOString().split('T')[0];
+            // Não definir datas automáticas para permitir flexibilidade
+            
+            console.log('Sistema de Matrículas - Pensador do Futuro inicializado com sucesso!');
+        });
+    </script>
+</body>
+</html>
